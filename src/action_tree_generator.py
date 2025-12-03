@@ -160,8 +160,7 @@ class ActionTreeGenerator:
             json=payload,
             timeout=120,
         )
-        print(self.api_key)
-        print(response.json())
+
         response.raise_for_status()
 
         data: Dict[str, Any] = response.json()
