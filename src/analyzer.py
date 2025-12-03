@@ -173,6 +173,34 @@ class DatabaseManager:
             ))
         logger.info(f"instructions saved for application: {instructions_js.get('application', "EcoStore")}")
 
+    def save_instruction(self, instruction_data: Dict[str, Any]) -> None:
+        """
+        Сохранение инструкции в БД
+        
+        Args:
+            instruction_data: Данные инструкции (Dict[str, Any])
+        """
+        with self.get_connection() as conn:
+            conn.execute('''
+                INSERT OR REPLACE INTO instructions
+                (id, task_id, task_data_json, steps_json, user_query, context_json,
+                 timestamp, usage_count, last_used, file_paths_json, likes, dislikes)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (
+                instruction_data['id'],
+                instruction_data['task_id'],
+                json.dumps(instruction_data.get('task_data', {}), ensure_ascii=False),
+                json.dumps(instruction_data.get('steps', []), ensure_ascii=False),
+                instruction_data.get('user_query', ''),
+                json.dumps(instruction_data.get('context', {}), ensure_ascii=False),
+                instruction_data['timestamp'],
+                instruction_data.get('usage_count', 0),
+                instruction_data.get('last_used'),
+                json.dumps(instruction_data.get('file_paths', {}), ensure_ascii=False),
+                instruction_data.get('likes', 0),
+                instruction_data.get('dislikes', 0)
+            ))
+        logger.info(f"Instruction saved: {instruction_data['id']}")
 
 class DOMAnalyzer:
     """Класс для анализа DOM структуры сайта"""
@@ -352,6 +380,50 @@ class InstructionManager:
             instructions: Список намерений (Dict[str, Any])
         """
         self.db_manager.save_instructions(instructions)
+
+    def save_instruction(
+        self,
+        task_id: str,
+        steps: List[str],
+        user_query: Optional[str] = None,
+        context: Optional[Dict[str, Any]] = None,
+        task_data: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
+        """
+        Сохранение инструкции
+        
+        Args:
+            task_id: ID задачи (str)
+            steps: Список шагов (List[str])
+            user_query: Запрос пользователя (Optional[str])
+            context: Контекст (Optional[Dict[str, Any]])
+            task_data: Данные задачи (Optional[Dict[str, Any]])
+            
+        Returns:
+            Сохранённые данные инструкции (Dict[str, Any])
+        """
+        instruction_id: str = str(uuid.uuid4())
+        timestamp: str = datetime.now().isoformat()
+
+        instruction_data: Dict[str, Any] = {
+            "id": instruction_id,
+            "task_id": task_id,
+            "task_data": task_data or {},
+             "steps": steps or [],
+            "user_query": user_query or "",
+            "context": context or {},
+            "timestamp": timestamp,
+            "usage_count": 0,
+            "last_used": None,
+            "file_paths": {},
+            "likes": 0,
+            "dislikes": 0
+        }
+
+        self.db_manager.save_instruction(instruction_data)
+        logger.info(f"Instruction saved for task: {task_id}")
+        return instruction_data
+
 
 
 
