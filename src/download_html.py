@@ -38,7 +38,7 @@ if __name__ == "__main__":
     
     # Список URL для скачивания
     urls = [
-        "http://localhost:8000/Downloads/new_site_for_project/site.html"
+        "http://localhost:8000/index.html" #захардкожено
     ]
     
     html_files = download_urls(urls)

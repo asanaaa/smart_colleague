@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoStore - Тестирование AI</title>
+    <link rel="stylesheet" href="site.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">EcoStore</div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home" class="nav-link">Главная</a></li>
+                <li><a href="#catalog" class="nav-link">Каталог</a></li>
+                <li><a href="#cart" class="nav-link">Корзина (<span id="cart-count">0</span>)</a></li>
+                <li><a href="#account" class="nav-link">Личный кабинет</a></li>
+                <li><a href="#blog" class="nav-link">Блог</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <button id="login-btn">Войти</button>
+            </div>
+        </nav>
+    </header>
+
+    <div class="breadcrumbs" id="breadcrumbs">
+        <a href="#home">Главная</a>
+    </div>
+
+    <main>
+        <!-- Главная страница -->
+        <section id="home" class="page active">
+            <div class="hero-slider">
+                <div class="slide active">
+                    <h2>Скидка 20% на первую покупку</h2>
+                    <p>Используйте промокод WELCOME20</p>
+                    <button class="cta-button" onclick="showDiscountInfo()">Как активировать?</button>
+                </div>
+                <div class="slide">
+                    <h2>Неделя веганских продуктов</h2>
+                    <p>Скидки до 30% на все веганские товары</p>
+                    <button class="cta-button" onclick="showVeganPromo()">Смотреть акцию</button>
+                </div>
+            </div>
+
+            <div class="categories-grid">
+                <h2>Категории товаров</h2>
+                <div class="categories">
+                    <div class="category" data-category="food" onclick="showCategory('food')">
+                        <div class="category-icon">🥗</div>
+                        <span>Еда</span>
+                    </div>
+                    <div class="category" data-category="cosmetics" onclick="showCategory('cosmetics')">
+                        <div class="category-icon">💄</div>
+                        <span>Косметика</span>
+                    </div>
+                    <div class="category" data-category="home" onclick="showCategory('home')">
+                        <div class="category-icon">🏠</div>
+                        <span>Дом</span>
+                    </div>
+                    <div class="category" data-category="bottles" onclick="showCategory('bottles')">
+                        <div class="category-icon">💧</div>
+                        <span>Многоразовые бутылки</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="carousel-section">
+                <h2>Хиты продаж</h2>
+                <div class="carousel-container" id="popular-products">
+                    <!-- Продукты загружаются через JS -->
+                </div>
+            </div>
+
+            <div class="carousel-section">
+                <h2>Новинки</h2>
+                <div class="carousel-container" id="new-products">
+                    <!-- Продукты загружаются через JS -->
+                </div>
+            </div>
+
+            <div class="info-sections">
+                <div class="info-card">
+                    <h3>Наша миссия</h3>
+                    <p>Мы создаем экологичное будущее, предлагая sustainable продукты</p>
+                    <button onclick="showMission()">Узнать больше</button>
+                </div>
+                <div class="info-card">
+                    <h3>Доставка</h3>
+                    <p>Бесплатная доставка при заказе от 2000₽</p>
+                    <button onclick="showDeliveryInfo()">Подробнее</button>
+                </div>
+            </div>
+
+            <div class="newsletter">
+                <h3>Подпишитесь на рассылку</h3>
+                <p>Получайте уведомления о скидках и новых поступлениях</p>
+                <form class="newsletter-form">
+                    <input type="email" id="newsletter-email" placeholder="Ваш email">
+                    <button type="submit">Подписаться</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Каталог товаров -->
+        <section id="catalog" class="page">
+            <div class="catalog-header">
+                <h1>Каталог товаров</h1>
+                <div class="search-bar">
+                    <input type="text" id="search-input" placeholder="Найди шампунь для чувствительной кожи...">
+                    <button onclick="performSearch()">Найти</button>
+                </div>
+            </div>
+            
+            <div class="catalog-layout">
+                <aside class="filters-sidebar">
+                    <div class="filter-group">
+                        <h4>Цена, ₽</h4>
+                        <div class="price-range">
+                            <input type="number" id="min-price" placeholder="0" min="0">
+                            <span>-</span>
+                            <input type="number" id="max-price" placeholder="10000" min="0">
+                        </div>
+                        <input type="range" id="price-range" min="0" max="10000" value="10000">
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>Категории</h4>
+                        <div class="category-filters">
+                            <label><input type="checkbox" value="food" data-filter="category"> Еда</label>
+                            <label><input type="checkbox" value="cosmetics" data-filter="category"> Косметика</label>
+                            <label><input type="checkbox" value="home" data-filter="category"> Дом</label>
+                            <label><input type="checkbox" value="bottles" data-filter="category"> Бутылки</label>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>Бренды</h4>
+                        <div class="brand-filters" id="brand-filters">
+                            <!-- Бренды загружаются через JS -->
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>Особенности</h4>
+                        <div class="feature-filters">
+                            <label><input type="checkbox" value="vegan" data-filter="features"> Веганский</label>
+                            <label><input type="checkbox" value="gluten-free" data-filter="features"> Без глютена</label>
+                            <label><input type="checkbox" value="organic" data-filter="features"> Органический</label>
+                            <label><input type="checkbox" value="biodegradable" data-filter="features"> Биоразлагаемый</label>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>Рейтинг</h4>
+                        <div class="rating-filters">
+                            <label><input type="radio" name="rating" value="4" data-filter="rating"> ★★★★☆ и выше</label>
+                            <label><input type="radio" name="rating" value="3" data-filter="rating"> ★★★☆☆ и выше</label>
+                            <label><input type="radio" name="rating" value="2" data-filter="rating"> ★★☆☆☆ и выше</label>
+                        </div>
+                    </div>
+
+                    <button class="clear-filters" onclick="clearFilters()">Сбросить фильтры</button>
+                </aside>
+                
+                <div class="products-section">
+                    <div class="sorting-options">
+                        <select id="sort-select" onchange="sortProducts()">
+                            <option value="popularity">По популярности</option>
+                            <option value="price-asc">По цене (возрастание)</option>
+                            <option value="price-desc">По цене (убывание)</option>
+                            <option value="newest">По новизне</option>
+                            <option value="rating">По рейтингу</option>
+                        </select>
+                        <div class="products-count">Найдено: <span id="products-count">0</span> товаров</div>
+                    </div>
+
+                    <div class="products-grid" id="products-grid">
+                        <!-- Товары загружаются через JS -->
+                    </div>
+                    
+                    <div class="load-more-container">
+                        <button id="load-more" onclick="loadMoreProducts()" style="display: none;">
+                            Показать еще
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Карточка товара -->
+        <section id="product" class="page">
+            <div class="product-detail" id="product-detail">
+                <!-- Контент загружается через JS -->
+            </div>
+        </section>
+
+        <!-- Корзина -->
+        <section id="cart" class="page">
+            <h1>Корзина</h1>
+            <div class="cart-content">
+                <div class="cart-items" id="cart-items">
+                    <!-- Товары в корзине -->
+                </div>
+                
+                <div class="cart-summary">
+                    <div class="promo-section">
+                        <input type="text" id="promo-code" placeholder="Введите промокод">
+                        <button onclick="applyPromoCode()">Применить</button>
+                    </div>
+                    
+                    <div class="cart-totals">
+                        <div class="total-line">
+                            <span>Сумма:</span>
+                            <span id="subtotal-price">0</span> ₽
+                        </div>
+                        <div class="total-line discount">
+                            <span>Скидка:</span>
+                            <span id="discount-amount">0</span> ₽
+                        </div>
+                        <div class="total-line final">
+                            <span>Итого:</span>
+                            <span id="total-price">0</span> ₽
+                        </div>
+                    </div>
+                    
+                    <button class="checkout-btn" onclick="proceedToCheckout()">Перейти к оформлению</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Оформление заказа -->
+        <section id="checkout" class="page">
+            <h1>Оформление заказа</h1>
+            <div class="checkout-content">
+                <div class="checkout-form">
+                    <div class="form-step active" id="step1">
+                        <h3>Данные покупателя</h3>
+                        <div class="form-group">
+                            <label>Имя *</label>
+                            <input type="text" id="customer-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" id="customer-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Телефон *</label>
+                            <input type="tel" id="customer-phone" required>
+                        </div>
+                        <button type="button" class="next-step" onclick="nextStep(2)">Далее</button>
+                    </div>
+
+                    <div class="form-step" id="step2">
+                        <h3>Адрес доставки</h3>
+                        <div class="form-group">
+                            <label>Город *</label>
+                            <input type="text" id="delivery-city" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Улица *</label>
+                            <input type="text" id="delivery-street" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Дом *</label>
+                            <input type="text" id="delivery-house" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Квартира</label>
+                            <input type="text" id="delivery-apartment">
+                        </div>
+                        <button type="button" class="prev-step" onclick="prevStep(1)">Назад</button>
+                        <button type="button" class="next-step" onclick="nextStep(3)">Далее</button>
+                    </div>
+
+                    <div class="form-step" id="step3">
+                        <h3>Способ доставки</h3>
+                        <div class="delivery-options">
+                            <label class="delivery-option">
+                                <input type="radio" name="delivery" value="courier" checked>
+                                <span>Курьерская доставка</span>
+                                <small>2-3 дня, 300₽</small>
+                            </label>
+                            <label class="delivery-option">
+                                <input type="radio" name="delivery" value="pickup">
+                                <span>Самовывоз</span>
+                                <small>1-2 дня, бесплатно</small>
+                            </label>
+                        </div>
+                        <button type="button" class="prev-step" onclick="prevStep(2)">Назад</button>
+                        <button type="button" class="next-step" onclick="nextStep(4)">Далее</button>
+                    </div>
+
+                    <div class="form-step" id="step4">
+                        <h3>Способ оплаты</h3>
+                        <div class="payment-options">
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="card" checked>
+                                <span>Банковская карта онлайн</span>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="payment" value="cash">
+                                <span>Наличными при получении</span>
+                            </label>
+                        </div>
+                        
+                        <div class="form-agreements">
+                            <label>
+                                <input type="checkbox" id="agree-terms" required>
+                                <span>Согласен с правилами доставки и возврата</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" id="subscribe-news">
+                                <span>Подписаться на рассылку</span>
+                            </label>
+                        </div>
+                        
+                        <button type="button" class="prev-step" onclick="prevStep(3)">Назад</button>
+                        <button type="button" class="confirm-order" onclick="confirmOrder()">Подтвердить заказ</button>
+                    </div>
+                </div>
+
+                <div class="order-summary">
+                    <h3>Ваш заказ</h3>
+                    <div id="checkout-items"></div>
+                    <div class="order-totals">
+                        <div class="total-line">
+                            <span>Товары:</span>
+                            <span id="checkout-subtotal">0</span> ₽
+                        </div>
+                        <div class="total-line">
+                            <span>Доставка:</span>
+                            <span id="delivery-cost">0</span> ₽
+                        </div>
+                        <div class="total-line final">
+                            <span>Итого:</span>
+                            <span id="checkout-total">0</span> ₽
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Личный кабинет -->
+        <section id="account" class="page">
+            <h1>Личный кабинет</h1>
+            <div class="account-content">
+                <div class="account-tabs">
+                    <button type="button" class="tab-button active" onclick="openAccountTab('profile')">Профиль</button>
+                    <button type="button" class="tab-button" onclick="openAccountTab('orders')">История заказов</button>
+                    <button type="button" class="tab-button" onclick="openAccountTab('wishlist')">Список желаний</button>
+                    <button type="button" class="tab-button" onclick="openAccountTab('bonuses')">Бонусы</button>
+                </div>
+                
+                <div class="tab-content active" id="profile-tab">
+                    <div class="profile-form">
+                        <div class="form-group">
+                            <label>Имя</label>
+                            <input type="text" id="profile-name" value="Иван Иванов">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="profile-email" value="ivan@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Телефон</label>
+                            <input type="tel" id="profile-phone" value="+7 999 123-45-67">
+                        </div>
+                        <button type="button" onclick="updateProfile()">Сохранить изменения</button>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="orders-tab">
+                    <div class="order-history" id="order-history">
+                        <!-- История заказов -->
+                    </div>
+                </div>
+
+                <div class="tab-content" id="wishlist-tab">
+                    <div class="wishlist-items" id="wishlist-items">
+                        <!-- Список желаний -->
+                    </div>
+                </div>
+
+                <div class="tab-content" id="bonuses-tab">
+                    <div class="bonus-info">
+                        <h3>Бонусная программа</h3>
+                        <div class="bonus-balance">
+                            <span>Ваш баланс:</span>
+                            <strong id="bonus-balance">150</strong> баллов
+                        </div>
+                        <p>1 балл = 1 рубль при оплате заказов</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Блог -->
+        <section id="blog" class="page">
+            <h1>Наш блог</h1>
+            <div class="blog-posts" id="blog-posts">
+                <!-- Статьи блога -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Модальные окна -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Вход в аккаунт</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="login-email" placeholder="Введите ваш email" required>
+                </div>
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" id="login-password" placeholder="Введите ваш пароль" required>
+                </div>
+                <button type="submit">Войти</button>
+            </form>
+            <p style="text-align: center; margin-top: 15px;">
+                Нет аккаунта? <a href="#" id="show-register" style="color: #3498db;">Зарегистрироваться</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Модальное окно регистрации -->
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Регистрация</h2>
+            <form id="register-form">
+                <div class="form-group">
+                    <label>Имя</label>
+                    <input type="text" id="register-name" placeholder="Введите ваше имя" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="register-email" placeholder="Введите ваш email" required>
+                </div>
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" id="register-password" placeholder="Введите пароль" required>
+                </div>
+                <div class="form-group">
+                    <label>Подтвердите пароль</label>
+                    <input type="password" id="register-confirm-password" placeholder="Повторите пароль" required>
+                </div>
+                <button type="submit">Зарегистрироваться</button>
+            </form>
+            <p style="text-align: center; margin-top: 15px;">
+                Уже есть аккаунт? <a href="#" id="show-login" style="color: #3498db;">Войти</a>
+            </p>
+        </div>
+    </div>
+
+    <div id="quick-view-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="quick-view-content"></div>
+        </div>
+    </div>
+
+    <script src="ai-assistant-widget.js"></script>
+    <script src="site.js"></script>
+</body>
+</html>
