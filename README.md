@@ -36,7 +36,8 @@ cd smart_colleague/src
 pip install -r requirements.txt
 ```
 Запустите статический сайт (из корня проекта или директории с index.html):
-```python -m http.server 8000
+```
+python -m http.server 8000
 ```
 Сайт будет доступен по адресу:
 ```
