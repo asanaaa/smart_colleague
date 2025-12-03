@@ -309,7 +309,6 @@ class AssistantManager:
                 top_k=3,
                 include_recommendation=True
             )
-            print("result:", result)
             
             logger.info(f"Query processed successfully, status: {result.get('status')}")
             

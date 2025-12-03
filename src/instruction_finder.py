@@ -166,7 +166,6 @@ class InstructionSearchEngine:
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.3
             )
-            print("response:", response)
             # Парсим JSON из ответа
             import re
             json_match = re.search(r'\{.*\}', response, re.DOTALL)

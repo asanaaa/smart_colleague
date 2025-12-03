@@ -424,7 +424,6 @@ if __name__ == "__main__":
         output_file="instructions_result.json",
         api_key="KEY"
     )
-    print(json.dumps(result, ensure_ascii=False, indent=2))
     """
     
     # Пример 2: Использование со словарём

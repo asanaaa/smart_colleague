@@ -26,7 +26,6 @@ logger = logging.getLogger(__name__)
 DATABASE_PATH: str = "ai_assistant.db"
 
 # Конфигурация API
-DEEPSEEK_API_KEY: str = os.getenv("DEEPSEEK_API_KEY", "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")
 DEEPSEEK_API_URL: str = "https://api.deepseek.com/v1/chat/completions"
 
 
@@ -408,7 +407,6 @@ class SiteAnalyzer:
             with open("prompt.txt", "r", encoding="utf-8") as f:
                 system_prompt = f.read()
 
-            print("system_prompt:", system_prompt[:50])
             if "error" in dom_analysis:
                 logger.error(f"DOM analysis error: {dom_analysis['error']}")
                 return {"status": "failed", "error": dom_analysis["error"]}
@@ -502,7 +500,7 @@ def main() -> Dict[str, Any]:
     parser = argparse.ArgumentParser(description="Site Analyzer - Analyze website and generate task tree")
     parser.add_argument('--db', type=str, default=DATABASE_PATH, help='Path to database file')
     parser.add_argument('--urls', type=str, nargs='+', default=None, help='URLs to analyze')
-    parser.add_argument('--api-key', type=str, default=DEEPSEEK_API_KEY, help='OpenRouter API key')
+    parser.add_argument('--api-key', type=str, default="YOUR-API-KEY", help='OpenRouter API key')
     parser.add_argument('--api-url', type=str, default=DEEPSEEK_API_URL, help='DeepSeek API URL')
 
     args = parser.parse_args()
@@ -511,7 +509,6 @@ def main() -> Dict[str, Any]:
     logger.info("SITE ANALYZER - Starting")
     logger.info("="*60)
     logger.info(f"Database: {args.db}")
-    logger.info(f"API: {'Configured' if 'sk-or-v1' in args.api_key else 'Mock mode (no API key)'}")
     logger.info("="*60)
 
     analyzer: SiteAnalyzer = SiteAnalyzer(args.db, args.api_key, args.api_url)
