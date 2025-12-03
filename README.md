@@ -34,6 +34,7 @@ cd smart_colleague/src
 ### Установка зависимостей
 ```
 pip install -r requirements.txt
+npm install jsdom
 ```
 Запустите статический сайт (из корня проекта или директории с index.html):
 ```
