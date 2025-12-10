@@ -39,7 +39,7 @@ class ActionTreeGenerator:
             base_url: URL OpenRouter API (str)
         """
         self.model: str = model
-        self.api_key: str = "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"
+        self.api_key: str = "YOUR-API"
         self.base_url: str = base_url
 
     # ---------- Вспомогательные методы (приватные) ----------
