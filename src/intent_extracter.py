@@ -393,7 +393,7 @@ def process_instructions_pipeline(
             api_key=""
         )
     """
-    api_key = "YOUR-API-KEY"
+    api_key = "YOUR-API"
 
     if api_key is None:
         import os

@@ -572,7 +572,7 @@ def main() -> Dict[str, Any]:
     parser = argparse.ArgumentParser(description="Site Analyzer - Analyze website and generate task tree")
     parser.add_argument('--db', type=str, default=DATABASE_PATH, help='Path to database file')
     parser.add_argument('--urls', type=str, nargs='+', default=None, help='URLs to analyze')
-    parser.add_argument('--api-key', type=str, default="YOUR-API-KEY", help='OpenRouter API key')
+    parser.add_argument('--api-key', type=str, default="YOUR-API", help='OpenRouter API key')
     parser.add_argument('--api-url', type=str, default=DEEPSEEK_API_URL, help='DeepSeek API URL')
 
     args = parser.parse_args()

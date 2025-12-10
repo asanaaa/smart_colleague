@@ -366,7 +366,7 @@ db_manager = DatabaseManager(DATABASE_PATH)
 # API ключ для OpenAI (прочитать из переменных окружения)
 
 # Инициализируем менеджер ассистента
-assistant_manager = AssistantManager(db_manager=db_manager, api_key="YOUR-API-KEY")
+assistant_manager = AssistantManager(db_manager=db_manager, api_key="YOUR-API")
 
 # Вспомогательный сервис
 ai_service = AIService(db_manager=db_manager)
