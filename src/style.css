@@ -2019,3 +2019,26 @@ body {
         width: 100%;
     }
 }
+.task-item {
+    cursor: pointer;
+    padding: 8px 10px;
+}
+
+.task-item__header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: flex-start;
+}
+
+.task-item__details {
+    margin-top: 6px;
+    padding-left: 24px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.instruction-steps {
+    margin: 0;
+    padding-left: 18px;
+}

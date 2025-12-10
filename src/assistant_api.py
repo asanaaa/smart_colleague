@@ -586,7 +586,7 @@ def get_instruction():
         tasks_tree = db_manager.get_latest_tasks_tree()
         task_data = None
         
-        for task in tasks_tree.get("tasks", []):
+        for task in tasks_tree.get("tasks", []): 
             if task["id"] == task_id:
                 task_data = task
                 break

@@ -367,10 +367,133 @@ document.querySelectorAll('.chat-widget__tab').forEach(tab => {
 
         // Add active to clicked tab
         tab.classList.add('active');
-        document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
         document.querySelector(`.${tabName}-tab`).classList.add('active');
+
+        // если это вкладка задач — подгружаем популярные инструкции
+        if (tabName === 'tasks') {
+            loadPopularInstructions();
+        }
     });
 });
+
+async function loadPopularInstructions() {
+    const container = document.getElementById('tasksList');
+    if (!container) return;
+
+    container.innerHTML = '<p>Загрузка задач...</p>';
+
+    try {
+        const response = await fetch('http://localhost:5000/api/popular-instructions?limit=10');
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json(); // { count, instructions: [...] }
+
+        if (!data.instructions || data.instructions.length === 0) {
+            container.innerHTML = '<p>Пока нет популярных задач.</p>';
+            return;
+        }
+
+        const list = document.createElement('div');
+        list.className = 'tasks-list-inner';
+
+        data.instructions.forEach(instr => {
+            const item = document.createElement('div');
+            item.className = 'task-item';
+
+            // сохраним task_id в data-атрибут
+            const taskId = instr.task_id;
+            item.dataset.taskId = taskId;
+
+            const title =
+                (instr.task_data && instr.task_data.name) ||
+                instr.user_query ||
+                instr.task_id ||
+                'Без названия';
+
+            item.innerHTML = `
+                <div class="task-item__header">
+                    <span class="task-icon">📌</span>
+                    <span>${escapeHtml(title)}</span>
+                </div>
+                <div class="task-item__details" style="display:none;"></div>
+            `;
+
+            // обработчик клика по задаче
+            item.addEventListener('click', () => {
+                toggleInstructionDetails(item, taskId);
+            });
+
+            list.appendChild(item);
+        });
+
+
+        container.innerHTML = '';
+        container.appendChild(list);
+    } catch (err) {
+        console.error('loadPopularInstructions error:', err);
+        container.innerHTML = '<p>Ошибка при загрузке задач.</p>';
+    }
+}
+
+async function toggleInstructionDetails(item, taskId) {
+    const details = item.querySelector('.task-item__details');
+    const isOpen = details.style.display === 'block';
+
+    // если уже открыто — просто свернём
+    if (isOpen) {
+        details.style.display = 'none';
+        return;
+    }
+
+    // если ещё не загружали — грузим с бэкенда
+    if (!details.dataset.loaded) {
+        details.innerHTML = '<p>Загрузка инструкции...</p>';
+
+        try {
+            const response = await fetch('http://localhost:5000/api/get-instruction', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ task_id: taskId }),
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            if (data.error || !data.steps) {
+                details.innerHTML = '<p>Инструкция не найдена.</p>';
+            } else {
+                // steps — список шагов; отрендерим в виде списка
+                const ul = document.createElement('ol');
+                ul.className = 'instruction-steps';
+
+                data.steps.forEach(step => {
+                    const li = document.createElement('li');
+                    li.textContent = step;
+                    ul.appendChild(li);
+                });
+
+                details.innerHTML = '';
+                details.appendChild(ul);
+            }
+
+            details.dataset.loaded = '1';
+        } catch (err) {
+            console.error('get-instruction error:', err);
+            details.innerHTML = '<p>Ошибка при загрузке инструкции.</p>';
+        }
+    }
+
+    // показать блок
+    details.style.display = 'block';
+}
+
 
 // Send chat message
 sendBtn.addEventListener('click', sendMessage);

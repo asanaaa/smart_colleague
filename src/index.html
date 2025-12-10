@@ -212,29 +212,13 @@
             <div class="tasks-search">
                 <input type="text" class="form__input" placeholder="Поиск задач...">
             </div>
-            <div class="tasks-list">
-                <div class="task-item">
-                    <span class="task-icon">📦</span>
-                    <span>Как отследить заказ?</span>
-                </div>
-                <div class="task-item">
-                    <span class="task-icon">💳</span>
-                    <span>Какие способы оплаты?</span>
-                </div>
-                <div class="task-item">
-                    <span class="task-icon">🚚</span>
-                    <span>Сроки доставки</span>
-                </div>
-                <div class="task-item">
-                    <span class="task-icon">↩️</span>
-                    <span>Как вернуть товар?</span>
-                </div>
-                <div class="task-item">
-                    <span class="task-icon">❓</span>
-                    <span>Часто задаваемые вопросы</span>
-                </div>
+
+            <!-- Пустой контейнер под динамический список -->
+            <div class="tasks-list" id="tasksList">
+                <!-- сюда JS будет рендерить задачи -->
             </div>
         </div>
+
     </div>
 
     <script src="script.js"></script>
