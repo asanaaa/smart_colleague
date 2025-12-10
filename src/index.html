@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoStore - Экомагазин</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header__container">
+            <div class="logo">EcoStore</div>
+            <nav class="nav">
+                <a href="#" class="nav__link active" data-section="home">Главная</a>
+                <a href="#" class="nav__link" data-section="catalog">Каталог</a>
+                <a href="#" class="nav__link" data-section="cart">
+                    Корзина
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+                <a href="#" class="nav__link" data-section="account">Личный кабинет</a>
+                <a href="#" class="nav__link" data-section="blog">Блог</a>
+                <a href="#" class="nav__link nav__login">Войти</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Home Section -->
+        <section class="section section--home active" id="section-home">
+            <div class="promo-banner">
+                <div class="promo-banner__content">
+                    <h1 class="promo-banner__title">Скидка 20% на первую покупку</h1>
+                    <div class="promo-banner__code">
+                        <span>Промокод:</span>
+                        <code>WELCOME20</code>
+                    </div>
+                    <button class="btn btn--promo">Как активировать?</button>
+                </div>
+            </div>
+
+            <section class="categories">
+                <h2 class="section__title">Категории</h2>
+                <div class="categories__grid">
+                    <div class="category-card" data-category="food">
+                        <div class="category-card__icon">🥬</div>
+                        <h3 class="category-card__title">Еда</h3>
+                    </div>
+                    <div class="category-card" data-category="cosmetics">
+                        <div class="category-card__icon">💄</div>
+                        <h3 class="category-card__title">Косметика</h3>
+                    </div>
+                    <div class="category-card" data-category="home">
+                        <div class="category-card__icon">🏡</div>
+                        <h3 class="category-card__title">Дом</h3>
+                    </div>
+                    <div class="category-card" data-category="bottles">
+                        <div class="category-card__icon">🍾</div>
+                        <h3 class="category-card__title">Бутылки</h3>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- Catalog Section -->
+        <section class="section section--catalog" id="section-catalog">
+            <div class="section__header">
+                <h2 class="section__title">Каталог</h2>
+                <div class="filter">
+                    <label for="categoryFilter" class="filter__label">Фильтр по категориям:</label>
+                    <select id="categoryFilter" class="filter__select">
+                        <option value="">Все категории</option>
+                        <option value="food">Еда</option>
+                        <option value="cosmetics">Косметика</option>
+                        <option value="home">Дом</option>
+                        <option value="bottles">Бутылки</option>
+                    </select>
+                </div>
+            </div>
+            <div class="products-grid" id="productsGrid">
+                <!-- Генерируется из JS -->
+            </div>
+        </section>
+
+        <!-- Cart Section -->
+        <section class="section section--cart" id="section-cart">
+            <h2 class="section__title">Корзина</h2>
+            <div id="cartContainer">
+                <table class="cart-table" id="cartTable">
+                    <thead>
+                        <tr>
+                            <th>Товар</th>
+                            <th>Цена</th>
+                            <th>Количество</th>
+                            <th>Сумма</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="cartBody">
+                        <!-- Генерируется из JS -->
+                    </tbody>
+                </table>
+                <div class="cart-summary">
+                    <div class="cart-summary__total">
+                        Итого: <span id="totalPrice">0</span> ₽
+                    </div>
+                    <button class="btn btn--primary" id="checkoutBtn">Оформить заказ</button>
+                </div>
+            </div>
+            <div class="empty-cart" id="emptyCart" style="display: none;">
+                <p>Корзина пуста</p>
+                <a href="#" class="nav__link" data-section="catalog">Перейти в каталог</a>
+            </div>
+        </section>
+
+        <!-- Account Section -->
+        <section class="section section--account" id="section-account">
+            <h2 class="section__title">Личный кабинет</h2>
+            <div class="account-form">
+                <p class="account-form__text">Авторизация будет реализована позже</p>
+                <form class="form">
+                    <div class="form__group">
+                        <label for="email" class="form__label">Email:</label>
+                        <input type="email" id="email" class="form__input" placeholder="your@email.com">
+                    </div>
+                    <div class="form__group">
+                        <label for="password" class="form__label">Пароль:</label>
+                        <input type="password" id="password" class="form__input" placeholder="Введите пароль">
+                    </div>
+                    <button type="button" class="btn btn--primary">Войти</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Blog Section -->
+        <section class="section section--blog" id="section-blog">
+            <h2 class="section__title">Блог</h2>
+            <div class="blog-grid">
+                <article class="blog-card">
+                    <h3 class="blog-card__title">Как начать жить экологично?</h3>
+                    <p class="blog-card__description">Простые советы для повседневной жизни, которые помогут сократить вашу углеводородный след.</p>
+                    <time class="blog-card__date">01 декабря 2025</time>
+                </article>
+                <article class="blog-card">
+                    <h3 class="blog-card__title">Мифы об эко-продуктах</h3>
+                    <p class="blog-card__description">Разбираемся, что правда, а что нет в мире экологичной косметики и товаров.</p>
+                    <time class="blog-card__date">25 ноября 2025</time>
+                </article>
+                <article class="blog-card">
+                    <h3 class="blog-card__title">Пластик: прошлое и будущее</h3>
+                    <p class="blog-card__description">История пластиковых упаковок и альтернатив, которые нас ждут в будущем.</p>
+                    <time class="blog-card__date">18 ноября 2025</time>
+                </article>
+                <article class="blog-card">
+                    <h3 class="blog-card__title">Интервью с экологом</h3>
+                    <p class="blog-card__description">Эксперт рассказывает о трендах в сфере устойчивого развития и экологии.</p>
+                    <time class="blog-card__date">10 ноября 2025</time>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer__content">
+            <div class="footer__left">
+                <p>© 2025 EcoStore. Магазин экологичных товаров.</p>
+            </div>
+            <div class="footer__right">
+                <a href="#" class="footer__link">О нас</a>
+                <a href="#" class="footer__link">Контакты</a>
+                <a href="#" class="footer__link">Политика конфиденциальности</a>
+                <a href="#" class="footer__link">Условия использования</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Help Button -->
+    <button class="help-btn" id="helpBtn" aria-label="Помощь">
+        💬
+    </button>
+
+    <!-- Chat Widget -->
+    <div class="chat-widget" id="chatWidget">
+        <div class="chat-widget__header">
+            <h3>EcoStore Assistant</h3>
+            <button class="chat-widget__close" id="closeWidget">&times;</button>
+        </div>
+
+        <!-- Tabs -->
+        <div class="chat-widget__tabs">
+            <button class="chat-widget__tab active" data-tab="chat">Чат</button>
+            <button class="chat-widget__tab" data-tab="tasks">Задачи</button>
+        </div>
+
+        <!-- Chat Content -->
+        <div class="chat-widget__content chat-tab active" data-tab="chat">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message message--bot">
+                    <p>Привет! 👋 Чем я могу вам помочь?</p>
+                </div>
+            </div>
+            <div class="chat-input-wrapper">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Напишите сообщение...">
+                <button class="btn btn--send" id="sendBtn">→</button>
+            </div>
+        </div>
+
+        <!-- Tasks Content -->
+        <div class="chat-widget__content tasks-tab" data-tab="tasks">
+            <div class="tasks-search">
+                <input type="text" class="form__input" placeholder="Поиск задач...">
+            </div>
+            <div class="tasks-list">
+                <div class="task-item">
+                    <span class="task-icon">📦</span>
+                    <span>Как отследить заказ?</span>
+                </div>
+                <div class="task-item">
+                    <span class="task-icon">💳</span>
+                    <span>Какие способы оплаты?</span>
+                </div>
+                <div class="task-item">
+                    <span class="task-icon">🚚</span>
+                    <span>Сроки доставки</span>
+                </div>
+                <div class="task-item">
+                    <span class="task-icon">↩️</span>
+                    <span>Как вернуть товар?</span>
+                </div>
+                <div class="task-item">
+                    <span class="task-icon">❓</span>
+                    <span>Часто задаваемые вопросы</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

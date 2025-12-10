@@ -26,9 +26,33 @@
 ---
 
 ## ▶️ Установка и запуск
-```bash
-hz kak
+### Установка
+```git clone https://github.com/asanaaa/smart_colleague.git
+cd smart_colleague/src
 ```
+
+### Установка зависимостей
+```
+pip install -r requirements.txt
+npm install jsdom
+```
+Запустите статический сайт (из корня проекта или директории с index.html):
+```
+python -m http.server 8000
+```
+Сайт будет доступен по адресу:
+```
+http://localhost:8000/index.html
+```
+### Создание дерева задач и инструкций
+```
+python .\analyzer.py
+```
+### Запуск ассистента
+```
+python .\assistant_api.py
+```
+Сервис поднимется и начнет анализировать входящие запросы
 
 ---
 

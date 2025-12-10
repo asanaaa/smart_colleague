@@ -1,0 +1,1428 @@
+{
+  "analyzedAt": "2025-12-03T16:46:44.756Z",
+  "summary": {
+    "totalPages": 1,
+    "totalElements": 147,
+    "elementsByType": {},
+    "interactiveElements": 25
+  },
+  "results": [
+    {
+      "file": "html_files\\page_1.html",
+      "domTree": {
+        "tagName": "html",
+        "attributes": {
+          "lang": "ru"
+        },
+        "children": [
+          {
+            "tagName": "head",
+            "attributes": {},
+            "children": [
+              {
+                "tagName": "meta",
+                "attributes": {
+                  "charset": "UTF-8"
+                },
+                "children": [],
+                "textContent": "",
+                "elementCount": 0
+              },
+              {
+                "tagName": "meta",
+                "attributes": {
+                  "name": "viewport",
+                  "content": "width=device-width, initial-scale=1.0"
+                },
+                "children": [],
+                "textContent": "",
+                "elementCount": 0
+              },
+              {
+                "tagName": "title",
+                "attributes": {},
+                "children": [],
+                "textContent": "EcoStore - Экомагазин",
+                "elementCount": 0
+              },
+              {
+                "tagName": "link",
+                "attributes": {
+                  "rel": "stylesheet",
+                  "href": "style.css"
+                },
+                "children": [],
+                "textContent": "",
+                "elementCount": 0
+              }
+            ],
+            "textContent": "EcoStore - Экомагазин",
+            "elementCount": 4
+          },
+          {
+            "tagName": "body",
+            "attributes": {},
+            "children": [
+              {
+                "tagName": "header",
+                "attributes": {
+                  "class": "header"
+                },
+                "children": [
+                  {
+                    "tagName": "div",
+                    "attributes": {
+                      "class": "header__container"
+                    },
+                    "children": [
+                      {
+                        "tagName": "div",
+                        "attributes": {
+                          "class": "logo"
+                        },
+                        "children": [],
+                        "textContent": "EcoStore",
+                        "elementCount": 0
+                      },
+                      {
+                        "tagName": "nav",
+                        "attributes": {
+                          "class": "nav"
+                        },
+                        "children": [
+                          {
+                            "tagName": "a",
+                            "attributes": {
+                              "href": "#",
+                              "class": "nav__link active",
+                              "data-section": "home"
+                            },
+                            "children": [],
+                            "textContent": "Главная",
+                            "elementCount": 0
+                          },
+                          {
+                            "tagName": "a",
+                            "attributes": {
+                              "href": "#",
+                              "class": "nav__link",
+                              "data-section": "catalog"
+                            },
+                            "children": [],
+                            "textContent": "Каталог",
+                            "elementCount": 0
+                          },
+                          {
+                            "tagName": "a",
+                            "attributes": {
+                              "href": "#",
+                              "class": "nav__link",
+                              "data-section": "cart"
+                            },
+                            "children": [
+                              {
+                                "tagName": "span",
+                                "attributes": {
+                                  "class": "cart-count",
+                                  "id": "cartCount"
+                                },
+                                "children": [],
+                                "textContent": "0",
+                                "elementCount": 0
+                              }
+                            ],
+                            "textContent": "Корзина 0",
+                            "elementCount": 1
+                          },
+                          {
+                            "tagName": "a",
+                            "attributes": {
+                              "href": "#",
+                              "class": "nav__link",
+                              "data-section": "account"
+                            },
+                            "children": [],
+                            "textContent": "Личный кабинет",
+                            "elementCount": 0
+                          },
+                          {
+                            "tagName": "a",
+                            "attributes": {
+                              "href": "#",
+                              "class": "nav__link",
+                              "data-section": "blog"
+                            },
+                            "children": [],
+                            "textContent": "Блог",
+                            "elementCount": 0
+                          },
+                          {
+                            "tagName": "a",
+                            "attributes": {
+                              "href": "#",
+                              "class": "nav__link nav__login"
+                            },
+                            "children": [],
+                            "textContent": "Войти",
+                            "elementCount": 0
+                          }
+                        ],
+                        "textContent": "Главная Каталог Корзина 0 Личный кабинет Блог Войти",
+                        "elementCount": 7
+                      }
+                    ],
+                    "textContent": "EcoStore Главная Каталог Корзина 0 Личный кабинет Блог Войти",
+                    "elementCount": 9
+                  }
+                ],
+                "textContent": "EcoStore Главная Каталог Корзина 0 Личный кабинет Блог Войти",
+                "elementCount": 10
+              },
+              {
+                "tagName": "main",
+                "attributes": {
+                  "class": "main"
+                },
+                "children": [
+                  {
+                    "tagName": "section",
+                    "attributes": {
+                      "class": "section section--home active",
+                      "id": "section-home"
+                    },
+                    "children": [
+                      {
+                        "tagName": "div",
+                        "attributes": {
+                          "class": "promo-banner"
+                        },
+                        "children": [
+                          {
+                            "tagName": "div",
+                            "attributes": {
+                              "class": "promo-banner__content"
+                            },
+                            "children": [
+                              {
+                                "tagName": "h1",
+                                "attributes": {
+                                  "class": "promo-banner__title"
+                                },
+                                "children": [],
+                                "textContent": "Скидка 20% на первую покупку",
+                                "elementCount": 0
+                              },
+                              {
+                                "tagName": "div",
+                                "attributes": {
+                                  "class": "promo-banner__code"
+                                },
+                                "children": [
+                                  {
+                                    "tagName": "span",
+                                    "attributes": {},
+                                    "children": [],
+                                    "textContent": "Промокод:",
+                                    "elementCount": 0
+                                  },
+                                  {
+                                    "tagName": "code",
+                                    "attributes": {},
+                                    "children": [],
+                                    "textContent": "WELCOME20",
+                                    "elementCount": 0
+                                  }
+                                ],
+                                "textContent": "Промокод: WELCOME20",
+                                "elementCount": 2
+                              },
+                              {
+                                "tagName": "button",
+                                "attributes": {
+                                  "class": "btn btn--promo"
+                                },
+                                "children": [],
+                                "textContent": "Как активировать?",
+                                "elementCount": 0
+                              }
+                            ],
+                            "textContent": "Скидка 20% на первую покупку Промокод: WELCOME20 Как активировать?",
+                            "elementCount": 5
+                          }
+                        ],
+                        "textContent": "Скидка 20% на первую покупку Промокод: WELCOME20 Как активировать?",
+                        "elementCount": 6
+                      },
+                      {
+                        "tagName": "section",
+                        "attributes": {
+                          "class": "categories"
+                        },
+                        "children": [
+                          {
+                            "tagName": "h2",
+                            "attributes": {
+                              "class": "section__title"
+                            },
+                            "children": [],
+                            "textContent": "Категории",
+                            "elementCount": 0
+                          },
+                          {
+                            "tagName": "div",
+                            "attributes": {
+                              "class": "categories__grid"
+                            },
+                            "children": [
+                              {
+                                "tagName": "div",
+                                "attributes": {
+                                  "class": "category-card",
+                                  "data-category": "food"
+                                },
+                                "children": [
+                                  {
+                                    "tagName": "div",
+                                    "attributes": {
+                                      "class": "category-card__icon"
+                                    },
+                                    "children": [],
+                                    "textContent": "🥬",
+                                    "elementCount": 0
+                                  },
+                                  {
+                                    "tagName": "h3",
+                                    "attributes": {
+                                      "class": "category-card__title"
+                                    },
+                                    "children": [],
+                                    "textContent": "Еда",
+                                    "elementCount": 0
+                                  }
+                                ],
+                                "textContent": "🥬 Еда",
+                                "elementCount": 2
+                              },
+                              {
+                                "tagName": "div",
+                                "attributes": {
+                                  "class": "category-card",
+                                  "data-category": "cosmetics"
+                                },
+                                "children": [
+                                  {
+                                    "tagName": "div",
+                                    "attributes": {
+                                      "class": "category-card__icon"
+                                    },
+                                    "children": [],
+                                    "textContent": "💄",
+                                    "elementCount": 0
+                                  },
+                                  {
+                                    "tagName": "h3",
+                                    "attributes": {
+                                      "class": "category-card__title"
+                                    },
+                                    "children": [],
+                                    "textContent": "Косметика",
+                                    "elementCount": 0
+                                  }
+                                ],
+                                "textContent": "💄 Косметика",
+                                "elementCount": 2
+                              },
+                              {
+                                "tagName": "div",
+                                "attributes": {
+                                  "class": "category-card",
+                                  "data-category": "home"
+                                },
+                                "children": [
+                                  {
+                                    "tagName": "div",
+                                    "attributes": {
+                                      "class": "category-card__icon"
+                                    },
+                                    "children": [],
+                                    "textContent": "🏡",
+                                    "elementCount": 0
+                                  },
+                                  {
+                                    "tagName": "h3",
+                                    "attributes": {
+                                      "class": "category-card__title"
+                                    },
+                                    "children": [],
+                                    "textContent": "Дом",
+                                    "elementCount": 0
+                                  }
+                                ],
+                                "textContent": "🏡 Дом",
+                                "elementCount": 2
+                              },
+                              {
+                                "tagName": "div",
+                                "attributes": {
+                                  "class": "category-card",
+                                  "data-category": "bottles"
+                                },
+                                "children": [
+                                  {
+                                    "tagName": "div",
+                                    "attributes": {
+                                      "class": "category-card__icon"
+                                    },
+                                    "children": [],
+                                    "textContent": "🍾",
+                                    "elementCount": 0
+                                  },
+                                  {
+                                    "tagName": "h3",
+                                    "attributes": {
+                                      "class": "category-card__title"
+                                    },
+                                    "children": [],
+                                    "textContent": "Бутылки",
+                                    "elementCount": 0
+                                  }
+                                ],
+                                "textContent": "🍾 Бутылки",
+                                "elementCount": 2
+                              }
+                            ],
+                            "textContent": "🥬 Еда 💄 Косметика 🏡 Дом 🍾 Бутылки",
+                            "elementCount": 12
+                          }
+                        ],
+                        "textContent": "Категории 🥬 Еда 💄 Косметика 🏡 Дом 🍾 Бутылки",
+                        "elementCount": 14
+                      }
+                    ],
+                    "textContent": "Скидка 20% на первую покупку Промокод: WELCOME20 Как активировать? Категории 🥬 Еда 💄 Косметика 🏡 Дом 🍾 Бутылки",
+                    "elementCount": 22
+                  },
+                  {
+                    "tagName": "section",
+                    "attributes": {
+                      "class": "section section--catalog",
+                      "id": "section-catalog"
+                    },
+                    "children": [
+                      {
+                        "tagName": "div",
+                        "attributes": {
+                          "class": "section__header"
+                        },
+                        "children": [
+                          {
+                            "tagName": "h2",
+                            "attributes": {
+                              "class": "section__title"
+                            },
+                            "children": [],
+                            "textContent": "Каталог",
+                            "elementCount": 0
+                          },
+                          {
+                            "tagName": "div",
+                            "attributes": {
+                              "class": "filter"
+                            },
+                            "children": [
+                              {
+                                "tagName": "label",
+                                "attributes": {
+                                  "for": "categoryFilter",
+                                  "class": "filter__label"
+                                },
+                                "children": [],
+                                "textContent": "Фильтр по категориям:",
+                                "elementCount": 0
+                              },
+                              {
+                                "tagName": "select",
+                                "attributes": {
+                                  "id": "categoryFilter",
+                                  "class": "filter__select"
+                                },
+                                "children": [
+                                  {
+                                    "tagName": "option",
+                                    "attributes": {
+                                      "value": ""
+                                    },
+                                    "children": [],
+                                    "textContent": "Все категории",
+                                    "elementCount": 0
+                                  },
+                                  {
+                                    "tagName": "option",
+                                    "attributes": {
+                                      "value": "food"
+                                    },
+                                    "children": [],
+                                    "textContent": "Еда",
+                                    "elementCount": 0
+                                  },
+                                  {
+                                    "tagName": "option",
+                                    "attributes": {
+                                      "value": "cosmetics"
+                                    },
+                                    "children": [],
+                                    "textContent": "Косметика",
+                                    "elementCount": 0
+                                  },
+                                  {
+                                    "tagName": "option",
+                                    "attributes": {
+                                      "value": "home"
+                                    },
+                                    "children": [],
+                                    "textContent": "Дом",
+                                    "elementCount": 0
+                                  },
+                                  {
+                                    "tagName": "option",
+                                    "attributes": {
+                                      "value": "bottles"
+                                    },
+                                    "children": [],
+                                    "textContent": "Бутылки",
+                                    "elementCount": 0
+                                  }
+                                ],
+                                "textContent": "Все категории Еда Косметика Дом Бутылки",
+                                "elementCount": 5
+                              }
+                            ],
+                            "textContent": "Фильтр по категориям: Все категории Еда Косметика Дом Бутылки",
+                            "elementCount": 7
+                          }
+                        ],
+                        "textContent": "Каталог Фильтр по категориям: Все категории Еда Косметика Дом Бутылки",
+                        "elementCount": 9
+                      },
+                      {
+                        "tagName": "div",
+                        "attributes": {
+                          "class": "products-grid",
+                          "id": "productsGrid"
+                        },
+                        "children": [],
+                        "textContent": "",
+                        "elementCount": 0
+                      }
+                    ],
+                    "textContent": "Каталог Фильтр по категориям: Все категории Еда Косметика Дом Бутылки",
+                    "elementCount": 11
+                  },
+                  {
+                    "tagName": "section",
+                    "attributes": {
+                      "class": "section section--cart",
+                      "id": "section-cart"
+                    },
+                    "children": [
+                      {
+                        "tagName": "h2",
+                        "attributes": {
+                          "class": "section__title"
+                        },
+                        "children": [],
+                        "textContent": "Корзина",
+                        "elementCount": 0
+                      },
+                      {
+                        "tagName": "div",
+                        "attributes": {
+                          "id": "cartContainer"
+                        },
+                        "children": [
+                          {
+                            "tagName": "table",
+                            "attributes": {
+                              "class": "cart-table",
+                              "id": "cartTable"
+                            },
+                            "children": [
+                              {
+                                "tagName": "thead",
+                                "attributes": {},
+                                "children": [
+                                  {
+                                    "tagName": "tr",
+                                    "attributes": {},
+                                    "children": [
+                                      {
+                                        "tagName": "th",
+                                        "attributes": {},
+                                        "children": [],
+                                        "textContent": "Товар",
+                                        "elementCount": 0
+                                      },
+                                      {
+                                        "tagName": "th",
+                                        "attributes": {},
+                                        "children": [],
+                                        "textContent": "Цена",
+                                        "elementCount": 0
+                                      },
+                                      {
+                                        "tagName": "th",
+                                        "attributes": {},
+                                        "children": [],
+                                        "textContent": "Количество",
+                                        "elementCount": 0
+                                      },
+                                      {
+                                        "tagName": "th",
+                                        "attributes": {},
+                                        "children": [],
+                                        "textContent": "Сумма",
+                                        "elementCount": 0
+                                      },
+                                      {
+                                        "tagName": "th",
+                                        "attributes": {},
+                                        "children": [],
+                                        "textContent": "",
+                                        "elementCount": 0
+                                      }
+                                    ],
+                                    "textContent": "Товар Цена Количество Сумма",
+                                    "elementCount": 5
+                                  }
+                                ],
+                                "textContent": "Товар Цена Количество Сумма",
+                                "elementCount": 6
+                              },
+                              {
+                                "tagName": "tbody",
+                                "attributes": {
+                                  "id": "cartBody"
+                                },
+                                "children": [],
+                                "textContent": "",
+                                "elementCount": 0
+                              }
+                            ],
+                            "textContent": "Товар Цена Количество Сумма",
+                            "elementCount": 8
+                          },
+                          {
+                            "tagName": "div",
+                            "attributes": {
+                              "class": "cart-summary"
+                            },
+                            "children": [
+                              {
+                                "tagName": "div",
+                                "attributes": {
+                                  "class": "cart-summary__total"
+                                },
+                                "children": [
+                                  {
+                                    "tagName": "span",
+                                    "attributes": {
+                                      "id": "totalPrice"
+                                    },
+                                    "children": [],
+                                    "textContent": "0",
+                                    "elementCount": 0
+                                  }
+                                ],
+                                "textContent": "Итого: 0 ₽",
+                                "elementCount": 1
+                              },
+                              {
+                                "tagName": "button",
+                                "attributes": {
+                                  "class": "btn btn--primary",
+                                  "id": "checkoutBtn"
+                                },
+                                "children": [],
+                                "textContent": "Оформить заказ",
+                                "elementCount": 0
+                              }
+                            ],
+                            "textContent": "Итого: 0 ₽ Оформить заказ",
+                            "elementCount": 3
+                          }
+                        ],
+                        "textContent": "Товар Цена Количество Сумма Итого: 0 ₽ Оформить заказ",
+                        "elementCount": 13
+                      },
+                      {
+                        "tagName": "div",
+                        "attributes": {
+                          "class": "empty-cart",
+                          "id": "emptyCart",
+                          "style": "display: none;"
+                        },
+                        "children": [
+                          {
+                            "tagName": "p",
+                            "attributes": {},
+                            "children": [],
+                            "textContent": "Корзина пуста",
+                            "elementCount": 0
+                          },
+                          {
+                            "tagName": "a",
+                            "attributes": {
+                              "href": "#",
+                              "class": "nav__link",
+                              "data-section": "catalog"
+                            },
+                            "children": [],
+                            "textContent": "Перейти в каталог",
+                            "elementCount": 0
+                          }
+                        ],
+                        "textContent": "Корзина пуста Перейти в каталог",
+                        "elementCount": 2
+                      }
+                    ],
+                    "textContent": "Корзина Товар Цена Количество Сумма Итого: 0 ₽ Оформить заказ Корзина пуста Перейти в каталог",
+                    "elementCount": 18
+                  },
+                  {
+                    "tagName": "section",
+                    "attributes": {
+                      "class": "section section--account",
+                      "id": "section-account"
+                    },
+                    "children": [
+                      {
+                        "tagName": "h2",
+                        "attributes": {
+                          "class": "section__title"
+                        },
+                        "children": [],
+                        "textContent": "Личный кабинет",
+                        "elementCount": 0
+                      },
+                      {
+                        "tagName": "div",
+                        "attributes": {
+                          "class": "account-form"
+                        },
+                        "children": [
+                          {
+                            "tagName": "p",
+                            "attributes": {
+                              "class": "account-form__text"
+                            },
+                            "children": [],
+                            "textContent": "Авторизация будет реализована позже",
+                            "elementCount": 0
+                          },
+                          {
+                            "tagName": "form",
+                            "attributes": {
+                              "class": "form"
+                            },
+                            "children": [
+                              {
+                                "tagName": "div",
+                                "attributes": {
+                                  "class": "form__group"
+                                },
+                                "children": [
+                                  {
+                                    "tagName": "label",
+                                    "attributes": {
+                                      "for": "email",
+                                      "class": "form__label"
+                                    },
+                                    "children": [],
+                                    "textContent": "Email:",
+                                    "elementCount": 0
+                                  },
+                                  {
+                                    "tagName": "input",
+                                    "attributes": {
+                                      "type": "email",
+                                      "id": "email",
+                                      "class": "form__input",
+                                      "placeholder": "your@email.com"
+                                    },
+                                    "children": [],
+                                    "textContent": "",
+                                    "elementCount": 0
+                                  }
+                                ],
+                                "textContent": "Email:",
+                                "elementCount": 2
+                              },
+                              {
+                                "tagName": "div",
+                                "attributes": {
+                                  "class": "form__group"
+                                },
+                                "children": [
+                                  {
+                                    "tagName": "label",
+                                    "attributes": {
+                                      "for": "password",
+                                      "class": "form__label"
+                                    },
+                                    "children": [],
+                                    "textContent": "Пароль:",
+                                    "elementCount": 0
+                                  },
+                                  {
+                                    "tagName": "input",
+                                    "attributes": {
+                                      "type": "password",
+                                      "id": "password",
+                                      "class": "form__input",
+                                      "placeholder": "Введите пароль"
+                                    },
+                                    "children": [],
+                                    "textContent": "",
+                                    "elementCount": 0
+                                  }
+                                ],
+                                "textContent": "Пароль:",
+                                "elementCount": 2
+                              },
+                              {
+                                "tagName": "button",
+                                "attributes": {
+                                  "type": "button",
+                                  "class": "btn btn--primary"
+                                },
+                                "children": [],
+                                "textContent": "Войти",
+                                "elementCount": 0
+                              }
+                            ],
+                            "textContent": "Email: Пароль: Войти",
+                            "elementCount": 7
+                          }
+                        ],
+                        "textContent": "Авторизация будет реализована позже Email: Пароль: Войти",
+                        "elementCount": 9
+                      }
+                    ],
+                    "textContent": "Личный кабинет Авторизация будет реализована позже Email: Пароль: Войти",
+                    "elementCount": 11
+                  },
+                  {
+                    "tagName": "section",
+                    "attributes": {
+                      "class": "section section--blog",
+                      "id": "section-blog"
+                    },
+                    "children": [
+                      {
+                        "tagName": "h2",
+                        "attributes": {
+                          "class": "section__title"
+                        },
+                        "children": [],
+                        "textContent": "Блог",
+                        "elementCount": 0
+                      },
+                      {
+                        "tagName": "div",
+                        "attributes": {
+                          "class": "blog-grid"
+                        },
+                        "children": [
+                          {
+                            "tagName": "article",
+                            "attributes": {
+                              "class": "blog-card"
+                            },
+                            "children": [
+                              {
+                                "tagName": "h3",
+                                "attributes": {
+                                  "class": "blog-card__title"
+                                },
+                                "children": [],
+                                "textContent": "Как начать жить экологично?",
+                                "elementCount": 0
+                              },
+                              {
+                                "tagName": "p",
+                                "attributes": {
+                                  "class": "blog-card__description"
+                                },
+                                "children": [],
+                                "textContent": "Простые советы для повседневной жизни, которые помогут сократить вашу углеводородный след.",
+                                "elementCount": 0
+                              },
+                              {
+                                "tagName": "time",
+                                "attributes": {
+                                  "class": "blog-card__date"
+                                },
+                                "children": [],
+                                "textContent": "01 декабря 2025",
+                                "elementCount": 0
+                              }
+                            ],
+                            "textContent": "Как начать жить экологично? Простые советы для повседневной жизни, которые помогут сократить вашу углеводородный след. 01 декабря 2025",
+                            "elementCount": 3
+                          },
+                          {
+                            "tagName": "article",
+                            "attributes": {
+                              "class": "blog-card"
+                            },
+                            "children": [
+                              {
+                                "tagName": "h3",
+                                "attributes": {
+                                  "class": "blog-card__title"
+                                },
+                                "children": [],
+                                "textContent": "Мифы об эко-продуктах",
+                                "elementCount": 0
+                              },
+                              {
+                                "tagName": "p",
+                                "attributes": {
+                                  "class": "blog-card__description"
+                                },
+                                "children": [],
+                                "textContent": "Разбираемся, что правда, а что нет в мире экологичной косметики и товаров.",
+                                "elementCount": 0
+                              },
+                              {
+                                "tagName": "time",
+                                "attributes": {
+                                  "class": "blog-card__date"
+                                },
+                                "children": [],
+                                "textContent": "25 ноября 2025",
+                                "elementCount": 0
+                              }
+                            ],
+                            "textContent": "Мифы об эко-продуктах Разбираемся, что правда, а что нет в мире экологичной косметики и товаров. 25 ноября 2025",
+                            "elementCount": 3
+                          },
+                          {
+                            "tagName": "article",
+                            "attributes": {
+                              "class": "blog-card"
+                            },
+                            "children": [
+                              {
+                                "tagName": "h3",
+                                "attributes": {
+                                  "class": "blog-card__title"
+                                },
+                                "children": [],
+                                "textContent": "Пластик: прошлое и будущее",
+                                "elementCount": 0
+                              },
+                              {
+                                "tagName": "p",
+                                "attributes": {
+                                  "class": "blog-card__description"
+                                },
+                                "children": [],
+                                "textContent": "История пластиковых упаковок и альтернатив, которые нас ждут в будущем.",
+                                "elementCount": 0
+                              },
+                              {
+                                "tagName": "time",
+                                "attributes": {
+                                  "class": "blog-card__date"
+                                },
+                                "children": [],
+                                "textContent": "18 ноября 2025",
+                                "elementCount": 0
+                              }
+                            ],
+                            "textContent": "Пластик: прошлое и будущее История пластиковых упаковок и альтернатив, которые нас ждут в будущем. 18 ноября 2025",
+                            "elementCount": 3
+                          },
+                          {
+                            "tagName": "article",
+                            "attributes": {
+                              "class": "blog-card"
+                            },
+                            "children": [
+                              {
+                                "tagName": "h3",
+                                "attributes": {
+                                  "class": "blog-card__title"
+                                },
+                                "children": [],
+                                "textContent": "Интервью с экологом",
+                                "elementCount": 0
+                              },
+                              {
+                                "tagName": "p",
+                                "attributes": {
+                                  "class": "blog-card__description"
+                                },
+                                "children": [],
+                                "textContent": "Эксперт рассказывает о трендах в сфере устойчивого развития и экологии.",
+                                "elementCount": 0
+                              },
+                              {
+                                "tagName": "time",
+                                "attributes": {
+                                  "class": "blog-card__date"
+                                },
+                                "children": [],
+                                "textContent": "10 ноября 2025",
+                                "elementCount": 0
+                              }
+                            ],
+                            "textContent": "Интервью с экологом Эксперт рассказывает о трендах в сфере устойчивого развития и экологии. 10 ноября 2025",
+                            "elementCount": 3
+                          }
+                        ],
+                        "textContent": "Как начать жить экологично? Простые советы для повседневной жизни, которые помогут сократить вашу углеводородный след. 01 декабря 2025 Мифы об эко-продуктах Разбираемся, что правда, а что нет в мире э",
+                        "elementCount": 16
+                      }
+                    ],
+                    "textContent": "Блог Как начать жить экологично? Простые советы для повседневной жизни, которые помогут сократить вашу углеводородный след. 01 декабря 2025 Мифы об эко-продуктах Разбираемся, что правда, а что нет в м",
+                    "elementCount": 18
+                  }
+                ],
+                "textContent": "Скидка 20% на первую покупку Промокод: WELCOME20 Как активировать? Категории 🥬 Еда 💄 Косметика 🏡 Дом 🍾 Бутылки Каталог Фильтр по категориям: Все категории Еда Косметика Дом Бутылки Корзина Товар Ц",
+                "elementCount": 85
+              },
+              {
+                "tagName": "footer",
+                "attributes": {
+                  "class": "footer"
+                },
+                "children": [
+                  {
+                    "tagName": "div",
+                    "attributes": {
+                      "class": "footer__content"
+                    },
+                    "children": [
+                      {
+                        "tagName": "div",
+                        "attributes": {
+                          "class": "footer__left"
+                        },
+                        "children": [
+                          {
+                            "tagName": "p",
+                            "attributes": {},
+                            "children": [],
+                            "textContent": "© 2025 EcoStore. Магазин экологичных товаров.",
+                            "elementCount": 0
+                          }
+                        ],
+                        "textContent": "© 2025 EcoStore. Магазин экологичных товаров.",
+                        "elementCount": 1
+                      },
+                      {
+                        "tagName": "div",
+                        "attributes": {
+                          "class": "footer__right"
+                        },
+                        "children": [
+                          {
+                            "tagName": "a",
+                            "attributes": {
+                              "href": "#",
+                              "class": "footer__link"
+                            },
+                            "children": [],
+                            "textContent": "О нас",
+                            "elementCount": 0
+                          },
+                          {
+                            "tagName": "a",
+                            "attributes": {
+                              "href": "#",
+                              "class": "footer__link"
+                            },
+                            "children": [],
+                            "textContent": "Контакты",
+                            "elementCount": 0
+                          },
+                          {
+                            "tagName": "a",
+                            "attributes": {
+                              "href": "#",
+                              "class": "footer__link"
+                            },
+                            "children": [],
+                            "textContent": "Политика конфиденциальности",
+                            "elementCount": 0
+                          },
+                          {
+                            "tagName": "a",
+                            "attributes": {
+                              "href": "#",
+                              "class": "footer__link"
+                            },
+                            "children": [],
+                            "textContent": "Условия использования",
+                            "elementCount": 0
+                          }
+                        ],
+                        "textContent": "О нас Контакты Политика конфиденциальности Условия использования",
+                        "elementCount": 4
+                      }
+                    ],
+                    "textContent": "© 2025 EcoStore. Магазин экологичных товаров. О нас Контакты Политика конфиденциальности Условия использования",
+                    "elementCount": 7
+                  }
+                ],
+                "textContent": "© 2025 EcoStore. Магазин экологичных товаров. О нас Контакты Политика конфиденциальности Условия использования",
+                "elementCount": 8
+              },
+              {
+                "tagName": "button",
+                "attributes": {
+                  "class": "help-btn",
+                  "id": "helpBtn",
+                  "aria-label": "Помощь"
+                },
+                "children": [],
+                "textContent": "💬",
+                "elementCount": 0
+              },
+              {
+                "tagName": "div",
+                "attributes": {
+                  "class": "chat-widget",
+                  "id": "chatWidget"
+                },
+                "children": [
+                  {
+                    "tagName": "div",
+                    "attributes": {
+                      "class": "chat-widget__header"
+                    },
+                    "children": [
+                      {
+                        "tagName": "h3",
+                        "attributes": {},
+                        "children": [],
+                        "textContent": "EcoStore Assistant",
+                        "elementCount": 0
+                      },
+                      {
+                        "tagName": "button",
+                        "attributes": {
+                          "class": "chat-widget__close",
+                          "id": "closeWidget"
+                        },
+                        "children": [],
+                        "textContent": "×",
+                        "elementCount": 0
+                      }
+                    ],
+                    "textContent": "EcoStore Assistant ×",
+                    "elementCount": 2
+                  },
+                  {
+                    "tagName": "div",
+                    "attributes": {
+                      "class": "chat-widget__tabs"
+                    },
+                    "children": [
+                      {
+                        "tagName": "button",
+                        "attributes": {
+                          "class": "chat-widget__tab active",
+                          "data-tab": "chat"
+                        },
+                        "children": [],
+                        "textContent": "Чат",
+                        "elementCount": 0
+                      },
+                      {
+                        "tagName": "button",
+                        "attributes": {
+                          "class": "chat-widget__tab",
+                          "data-tab": "tasks"
+                        },
+                        "children": [],
+                        "textContent": "Задачи",
+                        "elementCount": 0
+                      }
+                    ],
+                    "textContent": "Чат Задачи",
+                    "elementCount": 2
+                  },
+                  {
+                    "tagName": "div",
+                    "attributes": {
+                      "class": "chat-widget__content chat-tab active",
+                      "data-tab": "chat"
+                    },
+                    "children": [
+                      {
+                        "tagName": "div",
+                        "attributes": {
+                          "class": "chat-messages",
+                          "id": "chatMessages"
+                        },
+                        "children": [
+                          {
+                            "tagName": "div",
+                            "attributes": {
+                              "class": "message message--bot"
+                            },
+                            "children": [
+                              {
+                                "tagName": "p",
+                                "attributes": {},
+                                "children": [],
+                                "textContent": "Привет! 👋 Чем я могу вам помочь?",
+                                "elementCount": 0
+                              }
+                            ],
+                            "textContent": "Привет! 👋 Чем я могу вам помочь?",
+                            "elementCount": 1
+                          }
+                        ],
+                        "textContent": "Привет! 👋 Чем я могу вам помочь?",
+                        "elementCount": 2
+                      },
+                      {
+                        "tagName": "div",
+                        "attributes": {
+                          "class": "chat-input-wrapper"
+                        },
+                        "children": [
+                          {
+                            "tagName": "input",
+                            "attributes": {
+                              "type": "text",
+                              "class": "chat-input",
+                              "id": "chatInput",
+                              "placeholder": "Напишите сообщение..."
+                            },
+                            "children": [],
+                            "textContent": "",
+                            "elementCount": 0
+                          },
+                          {
+                            "tagName": "button",
+                            "attributes": {
+                              "class": "btn btn--send",
+                              "id": "sendBtn"
+                            },
+                            "children": [],
+                            "textContent": "→",
+                            "elementCount": 0
+                          }
+                        ],
+                        "textContent": "→",
+                        "elementCount": 2
+                      }
+                    ],
+                    "textContent": "Привет! 👋 Чем я могу вам помочь? →",
+                    "elementCount": 6
+                  },
+                  {
+                    "tagName": "div",
+                    "attributes": {
+                      "class": "chat-widget__content tasks-tab",
+                      "data-tab": "tasks"
+                    },
+                    "children": [
+                      {
+                        "tagName": "div",
+                        "attributes": {
+                          "class": "tasks-search"
+                        },
+                        "children": [
+                          {
+                            "tagName": "input",
+                            "attributes": {
+                              "type": "text",
+                              "class": "form__input",
+                              "placeholder": "Поиск задач..."
+                            },
+                            "children": [],
+                            "textContent": "",
+                            "elementCount": 0
+                          }
+                        ],
+                        "textContent": "",
+                        "elementCount": 1
+                      },
+                      {
+                        "tagName": "div",
+                        "attributes": {
+                          "class": "tasks-list"
+                        },
+                        "children": [
+                          {
+                            "tagName": "div",
+                            "attributes": {
+                              "class": "task-item"
+                            },
+                            "children": [
+                              {
+                                "tagName": "span",
+                                "attributes": {
+                                  "class": "task-icon"
+                                },
+                                "children": [],
+                                "textContent": "📦",
+                                "elementCount": 0
+                              },
+                              {
+                                "tagName": "span",
+                                "attributes": {},
+                                "children": [],
+                                "textContent": "Как отследить заказ?",
+                                "elementCount": 0
+                              }
+                            ],
+                            "textContent": "📦 Как отследить заказ?",
+                            "elementCount": 2
+                          },
+                          {
+                            "tagName": "div",
+                            "attributes": {
+                              "class": "task-item"
+                            },
+                            "children": [
+                              {
+                                "tagName": "span",
+                                "attributes": {
+                                  "class": "task-icon"
+                                },
+                                "children": [],
+                                "textContent": "💳",
+                                "elementCount": 0
+                              },
+                              {
+                                "tagName": "span",
+                                "attributes": {},
+                                "children": [],
+                                "textContent": "Какие способы оплаты?",
+                                "elementCount": 0
+                              }
+                            ],
+                            "textContent": "💳 Какие способы оплаты?",
+                            "elementCount": 2
+                          },
+                          {
+                            "tagName": "div",
+                            "attributes": {
+                              "class": "task-item"
+                            },
+                            "children": [
+                              {
+                                "tagName": "span",
+                                "attributes": {
+                                  "class": "task-icon"
+                                },
+                                "children": [],
+                                "textContent": "🚚",
+                                "elementCount": 0
+                              },
+                              {
+                                "tagName": "span",
+                                "attributes": {},
+                                "children": [],
+                                "textContent": "Сроки доставки",
+                                "elementCount": 0
+                              }
+                            ],
+                            "textContent": "🚚 Сроки доставки",
+                            "elementCount": 2
+                          },
+                          {
+                            "tagName": "div",
+                            "attributes": {
+                              "class": "task-item"
+                            },
+                            "children": [
+                              {
+                                "tagName": "span",
+                                "attributes": {
+                                  "class": "task-icon"
+                                },
+                                "children": [],
+                                "textContent": "↩️",
+                                "elementCount": 0
+                              },
+                              {
+                                "tagName": "span",
+                                "attributes": {},
+                                "children": [],
+                                "textContent": "Как вернуть товар?",
+                                "elementCount": 0
+                              }
+                            ],
+                            "textContent": "↩️ Как вернуть товар?",
+                            "elementCount": 2
+                          },
+                          {
+                            "tagName": "div",
+                            "attributes": {
+                              "class": "task-item"
+                            },
+                            "children": [
+                              {
+                                "tagName": "span",
+                                "attributes": {
+                                  "class": "task-icon"
+                                },
+                                "children": [],
+                                "textContent": "❓",
+                                "elementCount": 0
+                              },
+                              {
+                                "tagName": "span",
+                                "attributes": {},
+                                "children": [],
+                                "textContent": "Часто задаваемые вопросы",
+                                "elementCount": 0
+                              }
+                            ],
+                            "textContent": "❓ Часто задаваемые вопросы",
+                            "elementCount": 2
+                          }
+                        ],
+                        "textContent": "📦 Как отследить заказ? 💳 Какие способы оплаты? 🚚 Сроки доставки ↩️ Как вернуть товар? ❓ Часто задаваемые вопросы",
+                        "elementCount": 15
+                      }
+                    ],
+                    "textContent": "📦 Как отследить заказ? 💳 Какие способы оплаты? 🚚 Сроки доставки ↩️ Как вернуть товар? ❓ Часто задаваемые вопросы",
+                    "elementCount": 18
+                  }
+                ],
+                "textContent": "EcoStore Assistant × Чат Задачи Привет! 👋 Чем я могу вам помочь? → 📦 Как отследить заказ? 💳 Какие способы оплаты? 🚚 Сроки доставки ↩️ Как вернуть товар? ❓ Часто задаваемые вопросы",
+                "elementCount": 32
+              },
+              {
+                "tagName": "script",
+                "attributes": {
+                  "src": "script.js"
+                },
+                "children": [],
+                "textContent": "",
+                "elementCount": 0
+              }
+            ],
+            "textContent": "EcoStore Главная Каталог Корзина 0 Личный кабинет Блог Войти Скидка 20% на первую покупку Промокод: WELCOME20 Как активировать? Категории 🥬 Еда 💄 Косметика 🏡 Дом 🍾 Бутылки Каталог Фильтр по катего",
+            "elementCount": 141
+          }
+        ],
+        "textContent": "EcoStore - Экомагазин EcoStore Главная Каталог Корзина 0 Личный кабинет Блог Войти Скидка 20% на первую покупку Промокод: WELCOME20 Как активировать? Категории 🥬 Еда 💄 Косметика 🏡 Дом 🍾 Бутылки Ка",
+        "elementCount": 147
+      },
+      "stats": {
+        "totalElements": 147,
+        "interactiveElements": 25
+      }
+    }
+  ]
+}
