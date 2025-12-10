@@ -112,7 +112,7 @@ class LLMClient:
     def __init__(
         self,
         api_key: str,
-        model: str = "x-ai/grok-4.1-fast:free",
+        model: str = "tngtech/deepseek-r1t2-chimera:free",
         base_url: str = "https://openrouter.ai/api/v1/chat/completions",
         timeout: int = 120
     ):
@@ -393,7 +393,7 @@ def process_instructions_pipeline(
             api_key=""
         )
     """
-    api_key = "YOUR-API"
+    # api_key = 
 
     if api_key is None:
         import os
@@ -469,6 +469,7 @@ if __name__ == "__main__":
         result = process_instructions_pipeline(
             tree_dict=sample_tree,
             output_file="instructions_result.json",
+            api_key="api_key"
         )
         print("\n✅ Result:")
         print(json.dumps(result, ensure_ascii=False, indent=2))

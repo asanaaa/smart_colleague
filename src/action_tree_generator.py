@@ -5,7 +5,7 @@ import json
 import time
 import requests
 from typing import Union, Dict, Any
-
+import os
 
 class ActionTreeGenerator:
     """
@@ -39,7 +39,7 @@ class ActionTreeGenerator:
             base_url: URL OpenRouter API (str)
         """
         self.model: str = model
-        self.api_key: str = "YOUR-API"
+        self.api_key: str = api_key
         self.base_url: str = base_url
 
     # ---------- Вспомогательные методы (приватные) ----------

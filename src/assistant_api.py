@@ -10,6 +10,11 @@ from datetime import datetime
 from contextlib import contextmanager
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from dotenv import load_dotenv 
+from peewee import (
+    Model, SqliteDatabase, TextField, IntegerField, DateTimeField,
+    AutoField
+)
 
 # Импорт InstructionAssistant
 from instruction_finder import InstructionAssistant
@@ -29,226 +34,354 @@ DATABASE_PATH = "ai_assistant.db"
 
 
 # ==================== Database Manager ====================
+# ---------- Peewee DB/модели ----------
+
+db = SqliteDatabase(DATABASE_PATH, pragmas={"foreign_keys": 1})
+
+
+class BaseModel(Model):
+    class Meta:
+        database = db
+
+
+class InstructionsIntents(BaseModel):
+    id = AutoField()
+    application = TextField()
+    analyzed_at = DateTimeField()
+    instructions = TextField()
+
+    class Meta:
+        table_name = "instructions_intents"
+
+
+class TasksTrees(BaseModel):
+    id = AutoField()
+    application = TextField()
+    analyzed_at = DateTimeField()
+    tasks_json = TextField()
+    created_at = DateTimeField()
+
+    class Meta:
+        table_name = "tasks_trees"
+
+
+class Instructions(BaseModel):
+    id = AutoField()
+    task_id = TextField()
+    task_data_json = TextField(null=True)
+    steps_json = TextField(null=True)
+    user_query = TextField()
+    context_json = TextField(null=True)
+    timestamp = DateTimeField()
+    usage_count = IntegerField()
+    last_used = DateTimeField(null=True)
+    file_paths_json = TextField(null=True)
+    likes = IntegerField()
+    dislikes = IntegerField()
+    created_at = DateTimeField()
+    updated_at = DateTimeField()
+
+    class Meta:
+        table_name = "instructions"
+
+
+class InstructionRatings(BaseModel):
+    id = AutoField()
+    instruction_id = IntegerField()
+    rating = IntegerField()
+    user_session = TextField(null=True)
+
+    class Meta:
+        table_name = "instruction_ratings"
+
+
+class ChatHistory(BaseModel):
+    id = AutoField()
+    session_id = TextField()
+    message_text = TextField()
+    message_type = TextField()
+    instruction_id = IntegerField(null=True)
+    created_at = DateTimeField()
+
+    class Meta:
+        table_name = "chat_history"
+
+
+class UserSessions(BaseModel):
+    session_id = TextField(primary_key=True)
+    user_agent = TextField(null=True)
+    ip_address = TextField(null=True)
+    last_activity = DateTimeField(null=True)
+
+    class Meta:
+        table_name = "user_sessions"
+
+
+# ---------- Новый DatabaseManager на Peewee ----------
 
 class DatabaseManager:
-    """Менеджер базы данных SQLite (read-only для API)"""
-    
+    """Менеджер базы данных SQLite (read-only для API, но с записью рейтингов и чата)"""
+
     def __init__(self, db_path):
+        global db
         self.db_path = db_path
+
         if not os.path.exists(db_path):
             logger.error(f"Database not found at {db_path}")
             logger.info("Please run analyzer.py first to initialize the database")
             raise FileNotFoundError(f"Database not found at {db_path}")
-    
+        # Peewee сам управляет подключениями; здесь можно просто проверить коннект
+        db.connect(reuse_if_open=True)
+
     @contextmanager
     def get_connection(self):
-        """Контекстный менеджер для подключения к БД"""
-        conn = sqlite3.connect(self.db_path)
-        conn.row_factory = sqlite3.Row
+        """
+        Заглушка для совместимости: возвращает объект peewee.db,
+        чтобы старый код, если обращается к get_connection, не падал.
+        """
         try:
-            yield conn
+            if db.is_closed():
+                db.connect()
+            yield db
         finally:
-            conn.close()
-    
+            # соединение оставляем открытым; peewee сам менеджит пул
+            pass
+
+    # ---------- методы с тем же интерфейсом ----------
+
     def get_latest_instructions_intents(self):
         """Получение последних инструкций для интентов из таблицы instructions_intents"""
-        with self.get_connection() as conn:
-            cursor = conn.execute('''
-                SELECT id, application, analyzed_at, instructions
-                FROM instructions_intents
-                ORDER BY analyzed_at DESC
-                LIMIT 1
-            ''')
-            row = cursor.fetchone()
-            if row:
-                try:
-                    instructions = json.loads(row['instructions'])
-                    return {
-                        'id': row['id'],
-                        'application': row['application'],
-                        'analyzed_at': row['analyzed_at'],
-                        'instructions': instructions.get('instructions', []) if isinstance(instructions, dict) else instructions
-                    }
-                except json.JSONDecodeError:
-                    logger.error(f"Failed to parse instructions JSON from DB")
-                    return None
-        return None
-    
+        try:
+            row = (
+                InstructionsIntents
+                .select()
+                .order_by(InstructionsIntents.analyzed_at.desc())
+                .limit(1)
+                .first()
+            )
+            if not row:
+                return None
+
+            instructions = json.loads(row.instructions)
+            return {
+                "id": row.id,
+                "application": row.application,
+                "analyzed_at": row.analyzed_at,
+                "instructions": (
+                    instructions.get("instructions", [])
+                    if isinstance(instructions, dict)
+                    else instructions
+                ),
+            }
+        except json.JSONDecodeError:
+            logger.error("Failed to parse instructions JSON from DB")
+            return None
+
     def get_latest_tasks_tree(self):
         """Получение последнего дерева задач из БД"""
-        with self.get_connection() as conn:
-            cursor = conn.execute('''
-                SELECT application, analyzed_at, tasks_json
-                FROM tasks_trees
-                ORDER BY created_at DESC
-                LIMIT 1
-            ''')
-            row = cursor.fetchone()
-            if row:
-                return {
-                    'application': row['application'],
-                    'analyzed_at': row['analyzed_at'],
-                    'tasks': json.loads(row['tasks_json'])
-                }
-        return {}
-    
+        row = (
+            TasksTrees
+            .select()
+            .order_by(TasksTrees.created_at.desc())
+            .limit(1)
+            .first()
+        )
+        if not row:
+            return {}
+        return {
+            "application": row.application,
+            "analyzed_at": row.analyzed_at,
+            "tasks": json.loads(row.tasks_json),
+        }
+
     def get_instruction(self, instruction_id):
         """Получение инструкции по ID"""
-        with self.get_connection() as conn:
-            cursor = conn.execute('SELECT * FROM instructions WHERE id = ?', (instruction_id,))
-            row = cursor.fetchone()
-            if row:
-                return self._row_to_instruction_dict(row)
+        row = Instructions.get_or_none(Instructions.id == instruction_id)
+        if row:
+            return self._row_to_instruction_dict(row)
         return None
-    
+
     def get_instruction_by_task_id(self, task_id):
         """Получение инструкции по ID задачи"""
-        with self.get_connection() as conn:
-            cursor = conn.execute(
-                'SELECT * FROM instructions WHERE task_id = ? ORDER BY usage_count DESC LIMIT 1',
-                (task_id,)
-            )
-            row = cursor.fetchone()
-            if row:
-                return self._row_to_instruction_dict(row)
+        row = (
+            Instructions
+            .select()
+            .where(Instructions.task_id == task_id)
+            .order_by(Instructions.usage_count.desc())
+            .limit(1)
+            .first()
+        )
+        if row:
+            return self._row_to_instruction_dict(row)
         return None
-    
+
     def update_instruction_usage(self, instruction_id):
         """Обновление счетчика использования инструкции"""
-        with self.get_connection() as conn:
-            conn.execute('''
-                UPDATE instructions
-                SET usage_count = usage_count + 1,
-                    last_used = ?,
-                    updated_at = CURRENT_TIMESTAMP
-                WHERE id = ?
-            ''', (datetime.now().isoformat(), instruction_id))
-            conn.commit()
-    
+        now_iso = datetime.now().isoformat()
+        (
+            Instructions
+            .update(
+                usage_count=Instructions.usage_count + 1,
+                last_used=now_iso,
+                updated_at=datetime.now(),
+            )
+            .where(Instructions.id == instruction_id)
+            .execute()
+        )
+
     def rate_instruction(self, instruction_id, rating, user_session=None):
         """Оценка инструкции (лайк/дизлайк)"""
-        with self.get_connection() as conn:
-            # Проверяем, не оценивал ли уже пользователь эту инструкцию
-            if user_session:
-                cursor = conn.execute(
-                    'SELECT id FROM instruction_ratings WHERE instruction_id = ? AND user_session = ?',
-                    (instruction_id, user_session)
+        if user_session:
+            exists = (
+                InstructionRatings
+                .select()
+                .where(
+                    (InstructionRatings.instruction_id == instruction_id)
+                    & (InstructionRatings.user_session == user_session)
                 )
-                if cursor.fetchone():
-                    return False, "Вы уже оценили эту инструкцию"
-            
-            # Добавляем оценку
-            conn.execute('''
-                INSERT INTO instruction_ratings (instruction_id, rating, user_session)
-                VALUES (?, ?, ?)
-            ''', (instruction_id, rating, user_session))
-            
-            # Обновляем счетчики лайков/дизлайков в инструкции
-            if rating == 1:
-                conn.execute('UPDATE instructions SET likes = likes + 1 WHERE id = ?', (instruction_id,))
-            else:
-                conn.execute('UPDATE instructions SET dislikes = dislikes + 1 WHERE id = ?', (instruction_id,))
-            
-            conn.commit()
-            return True, "Оценка сохранена"
-    
+                .exists()
+            )
+            if exists:
+                return False, "Вы уже оценили эту инструкцию"
+
+        InstructionRatings.create(
+            instruction_id=instruction_id,
+            rating=rating,
+            user_session=user_session,
+        )
+
+        if rating == 1:
+            (
+                Instructions
+                .update(likes=Instructions.likes + 1)
+                .where(Instructions.id == instruction_id)
+                .execute()
+            )
+        else:
+            (
+                Instructions
+                .update(dislikes=Instructions.dislikes + 1)
+                .where(Instructions.id == instruction_id)
+                .execute()
+            )
+
+        return True, "Оценка сохранена"
+
     def get_instruction_ratings(self, instruction_id):
         """Получение оценок инструкции"""
-        with self.get_connection() as conn:
-            cursor = conn.execute('''
-                SELECT rating, COUNT(*) as count
-                FROM instruction_ratings
-                WHERE instruction_id = ?
-                GROUP BY rating
-            ''', (instruction_id,))
-            ratings = {'likes': 0, 'dislikes': 0}
-            for row in cursor:
-                if row['rating'] == 1:
-                    ratings['likes'] = row['count']
-                else:
-                    ratings['dislikes'] = row['count']
-            return ratings
-    
+        query = (
+            InstructionRatings
+            .select(InstructionRatings.rating, fn.COUNT(InstructionRatings.id).alias("count"))
+            .where(InstructionRatings.instruction_id == instruction_id)
+            .group_by(InstructionRatings.rating)
+        )
+        ratings = {"likes": 0, "dislikes": 0}
+        for row in query:
+            if row.rating == 1:
+                ratings["likes"] = row.count
+            else:
+                ratings["dislikes"] = row.count
+        return ratings
+
     def get_popular_instructions(self, limit=10):
         """Получение популярных инструкций"""
-        with self.get_connection() as conn:
-            cursor = conn.execute('''
-                SELECT * FROM instructions
-                ORDER BY (usage_count + likes * 5) DESC
-                LIMIT ?
-            ''', (limit,))
-            return [self._row_to_instruction_dict(row) for row in cursor]
-    
+        query = (
+            Instructions
+            .select()
+            .order_by((Instructions.usage_count + Instructions.likes * 5).desc())
+            .limit(limit)
+        )
+        return [self._row_to_instruction_dict(row) for row in query]
+
     def search_instructions(self, query):
         """Поиск инструкций по запросу"""
-        with self.get_connection() as conn:
-            cursor = conn.execute('''
-                SELECT * FROM instructions
-                WHERE task_id LIKE ?
-                OR user_query LIKE ?
-                OR task_data_json LIKE ?
-                OR steps_json LIKE ?
-                ORDER BY usage_count DESC
-            ''', (f'%{query}%', f'%{query}%', f'%{query}%', f'%{query}%'))
-            return [self._row_to_instruction_dict(row) for row in cursor]
-    
+        pattern = f"%{query}%"
+        q = (
+            Instructions
+            .select()
+            .where(
+                (Instructions.task_id ** pattern)
+                | (Instructions.user_query ** pattern)
+                | (Instructions.task_data_json ** pattern)
+                | (Instructions.steps_json ** pattern)
+            )
+            .order_by(Instructions.usage_count.desc())
+        )
+        return [self._row_to_instruction_dict(row) for row in q]
+
     def save_chat_message(self, session_id, message_text, message_type, instruction_id=None):
         """Сохранение сообщения чата в историю"""
-        with self.get_connection() as conn:
-            conn.execute('''
-                INSERT INTO chat_history (session_id, message_text, message_type, instruction_id)
-                VALUES (?, ?, ?, ?)
-            ''', (session_id, message_text, message_type, instruction_id))
-            conn.commit()
-    
+        ChatHistory.create(
+            session_id=session_id,
+            message_text=message_text,
+            message_type=message_type,
+            instruction_id=instruction_id,
+            created_at=datetime.now(),
+        )
+
     def get_chat_history(self, session_id, limit=50):
         """Получение истории чата для сессии"""
-        with self.get_connection() as conn:
-            cursor = conn.execute('''
-                SELECT message_text, message_type, instruction_id, created_at
-                FROM chat_history
-                WHERE session_id = ?
-                ORDER BY created_at DESC
-                LIMIT ?
-            ''', (session_id, limit))
-            return [dict(row) for row in cursor]
-    
+        q = (
+            ChatHistory
+            .select(
+                ChatHistory.message_text,
+                ChatHistory.message_type,
+                ChatHistory.instruction_id,
+                ChatHistory.created_at,
+            )
+            .where(ChatHistory.session_id == session_id)
+            .order_by(ChatHistory.created_at.desc())
+            .limit(limit)
+        )
+        rows = list(q)
+        # вернуть список dict как раньше
+        result = [
+            {
+                "message_text": r.message_text,
+                "message_type": r.message_type,
+                "instruction_id": r.instruction_id,
+                "created_at": r.created_at,
+            }
+            for r in rows
+        ]
+        return result
+
     def create_user_session(self, session_id, user_agent=None, ip_address=None):
         """Создание новой пользовательской сессии"""
-        with self.get_connection() as conn:
-            conn.execute('''
-                INSERT OR REPLACE INTO user_sessions (session_id, user_agent, ip_address)
-                VALUES (?, ?, ?)
-            ''', (session_id, user_agent, ip_address))
-            conn.commit()
-    
+        UserSessions.insert(
+            session_id=session_id,
+            user_agent=user_agent,
+            ip_address=ip_address,
+            last_activity=datetime.now(),
+        ).on_conflict_replace().execute()
+
     def update_session_activity(self, session_id):
         """Обновление времени последней активности сессии"""
-        with self.get_connection() as conn:
-            conn.execute('''
-                UPDATE user_sessions
-                SET last_activity = CURRENT_TIMESTAMP
-                WHERE session_id = ?
-            ''', (session_id,))
-            conn.commit()
-    
+        (
+            UserSessions
+            .update(last_activity=datetime.now())
+            .where(UserSessions.session_id == session_id)
+            .execute()
+        )
+
     def _row_to_instruction_dict(self, row):
         """Преобразование строки БД в словарь инструкции"""
+        # row здесь — объект Instructions
         return {
-            'id': row['id'],
-            'task_id': row['task_id'],
-            'task_data': json.loads(row['task_data_json']) if row['task_data_json'] else {},
-            'steps': json.loads(row['steps_json']) if row['steps_json'] else [],
-            'user_query': row['user_query'],
-            'context': json.loads(row['context_json']) if row['context_json'] else {},
-            'timestamp': row['timestamp'],
-            'usage_count': row['usage_count'],
-            'last_used': row['last_used'],
-            'file_paths': json.loads(row['file_paths_json']) if row['file_paths_json'] else {},
-            'likes': row['likes'],
-            'dislikes': row['dislikes'],
-            'created_at': row['created_at'],
-            'updated_at': row['updated_at']
+            "id": row.id,
+            "task_id": row.task_id,
+            "task_data": json.loads(row.task_data_json) if row.task_data_json else {},
+            "steps": json.loads(row.steps_json) if row.steps_json else [],
+            "user_query": row.user_query,
+            "context": json.loads(row.context_json) if row.context_json else {},
+            "timestamp": row.timestamp,
+            "usage_count": row.usage_count,
+            "last_used": row.last_used,
+            "file_paths": json.loads(row.file_paths_json) if row.file_paths_json else {},
+            "likes": row.likes,
+            "dislikes": row.dislikes,
+            "created_at": row.created_at,
+            "updated_at": row.updated_at,
         }
 
 
@@ -365,8 +498,12 @@ db_manager = DatabaseManager(DATABASE_PATH)
 
 # API ключ для OpenAI (прочитать из переменных окружения)
 
+
+load_dotenv()  # подгрузит .env
+api_key = os.getenv("OPENROUTER_API_KEY")
+
 # Инициализируем менеджер ассистента
-assistant_manager = AssistantManager(db_manager=db_manager, api_key="YOUR-API")
+assistant_manager = AssistantManager(db_manager=db_manager, api_key=api_key)
 
 # Вспомогательный сервис
 ai_service = AIService(db_manager=db_manager)

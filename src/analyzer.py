@@ -12,8 +12,15 @@ import argparse
 from typing import Dict, Any, List, Optional, Union
 import uuid
 
+from peewee import (
+    Model, SqliteDatabase, AutoField, TextField, IntegerField
+)
 from action_tree_generator import ActionTreeGenerator
 from intent_extracter import process_instructions_pipeline
+
+from dotenv import load_dotenv  # pip install python-dotenv
+
+
 
 # Настройка логирования
 logging.basicConfig(
@@ -29,6 +36,95 @@ DATABASE_PATH: str = "ai_assistant.db"
 DEEPSEEK_API_URL: str = "https://api.deepseek.com/v1/chat/completions"
 
 
+
+db: SqliteDatabase | None = None
+
+
+# ---------- модели Peewee ----------
+
+class BaseModel(Model):
+    class Meta:
+        database = db
+
+
+class TasksTrees(BaseModel):
+    id = AutoField()
+    application = TextField()
+    analyzed_at = TextField()
+    tasks_json = TextField()
+    created_at = TextField()  # TEXT DEFAULT CURRENT_TIMESTAMP
+
+    class Meta:
+        table_name = "tasks_trees"
+
+
+class InstructionsIntents(BaseModel):
+    id = AutoField()
+    application = TextField()
+    analyzed_at = TextField()
+    instructions = TextField()
+    created_at = TextField()
+
+    class Meta:
+        table_name = "instructions_intents"
+
+
+class Instructions(BaseModel):
+    id = TextField(primary_key=True)  # TEXT PRIMARY KEY
+    task_id = TextField()
+    task_data_json = TextField(null=True)
+    steps_json = TextField()
+    user_query = TextField(null=True)
+    context_json = TextField(null=True)
+    timestamp = TextField()
+    usage_count = IntegerField(default=0)
+    last_used = TextField(null=True)
+    file_paths_json = TextField(null=True)
+    likes = IntegerField(default=0)
+    dislikes = IntegerField(default=0)
+    created_at = TextField()
+    updated_at = TextField()
+
+    class Meta:
+        table_name = "instructions"
+
+
+class InstructionRatings(BaseModel):
+    id = AutoField()
+    instruction_id = TextField()
+    rating = IntegerField()
+    user_session = TextField(null=True)
+    created_at = TextField()
+
+    class Meta:
+        table_name = "instruction_ratings"
+
+
+class UserSessions(BaseModel):
+    session_id = TextField(primary_key=True)
+    user_agent = TextField(null=True)
+    ip_address = TextField(null=True)
+    created_at = TextField()
+    last_activity = TextField()
+
+    class Meta:
+        table_name = "user_sessions"
+
+
+class ChatHistory(BaseModel):
+    id = AutoField()
+    session_id = TextField()
+    message_text = TextField()
+    message_type = TextField()
+    instruction_id = TextField(null=True)
+    created_at = TextField()
+
+    class Meta:
+        table_name = "chat_history"
+
+
+# ---------- DatabaseManager на Peewee ----------
+
 class DatabaseManager:
     """Менеджер базы данных SQLite"""
 
@@ -37,170 +133,177 @@ class DatabaseManager:
         Args:
             db_path: Путь к файлу БД (str)
         """
+        global db
         self.db_path: str = db_path
+
+        # инициализируем peewee-базу
+        db = SqliteDatabase(self.db_path, pragmas={"foreign_keys": 1})
+        db.connect(reuse_if_open=True)
+
         self.init_database()
 
     @contextmanager
     def get_connection(self):
-        """Контекстный менеджер для подключения к БД"""
-        conn = sqlite3.connect(self.db_path)
-        conn.row_factory = sqlite3.Row
+        """
+        Контекстный менеджер для подключения к БД.
+
+        Оставлен для совместимости, но внутри используется peewee db.
+        """
         try:
-            yield conn
-            conn.commit()
+            if db.is_closed():
+                db.connect()
+            # создаём «псевдо‑conn» с тем же интерфейсом execute/commit/rollback,
+            # если где‑то старый код его использует
+            yield db
+            db.commit()
         except Exception as e:
-            conn.rollback()
+            db.rollback()
             raise e
-        finally:
-            conn.close()
 
     def init_database(self) -> None:
         """Инициализация структуры базы данных"""
-        with self.get_connection() as conn:
-            conn.execute('''
-                CREATE TABLE IF NOT EXISTS tasks_trees (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    application TEXT NOT NULL,
-                    analyzed_at TEXT NOT NULL,
-                    tasks_json TEXT NOT NULL,
-                    created_at TEXT DEFAULT CURRENT_TIMESTAMP
-                )
-            ''')
 
-            conn.execute('''
-                CREATE TABLE IF NOT EXISTS instructions_intents (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    application TEXT NOT NULL,
-                    analyzed_at TEXT NOT NULL,
-                    instructions TEXT NOT NULL,
-                    created_at TEXT DEFAULT CURRENT_TIMESTAMP
-                )
-            ''')
+        # создаём таблицы, если их нет
+        db.create_tables(
+            [
+                TasksTrees,
+                InstructionsIntents,
+                Instructions,
+                InstructionRatings,
+                UserSessions,
+                ChatHistory,
+            ],
+            safe=True,
+        )
 
-            conn.execute('''
-                CREATE TABLE IF NOT EXISTS instructions (
-                    id TEXT PRIMARY KEY,
-                    task_id TEXT NOT NULL,
-                    task_data_json TEXT,
-                    steps_json TEXT NOT NULL,
-                    user_query TEXT,
-                    context_json TEXT,
-                    timestamp TEXT NOT NULL,
-                    usage_count INTEGER DEFAULT 0,
-                    last_used TEXT,
-                    file_paths_json TEXT,
-                    likes INTEGER DEFAULT 0,
-                    dislikes INTEGER DEFAULT 0,
-                    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-                    updated_at TEXT DEFAULT CURRENT_TIMESTAMP
-                )
-            ''')
-
-            conn.execute('''
-                CREATE TABLE IF NOT EXISTS instruction_ratings (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    instruction_id TEXT NOT NULL,
-                    rating INTEGER NOT NULL,
-                    user_session TEXT,
-                    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-                    FOREIGN KEY (instruction_id) REFERENCES instructions (id)
-                )
-            ''')
-
-            conn.execute('''
-                CREATE TABLE IF NOT EXISTS user_sessions (
-                    session_id TEXT PRIMARY KEY,
-                    user_agent TEXT,
-                    ip_address TEXT,
-                    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-                    last_activity TEXT DEFAULT CURRENT_TIMESTAMP
-                )
-            ''')
-
-            conn.execute('''
-                CREATE TABLE IF NOT EXISTS chat_history (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    session_id TEXT NOT NULL,
-                    message_text TEXT NOT NULL,
-                    message_type TEXT NOT NULL,
-                    instruction_id TEXT,
-                    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-                    FOREIGN KEY (session_id) REFERENCES user_sessions (session_id),
-                    FOREIGN KEY (instruction_id) REFERENCES instructions (id)
-                )
-            ''')
-
-            conn.execute('CREATE INDEX IF NOT EXISTS idx_instructions_task_id ON instructions(task_id)')
-            conn.execute('CREATE INDEX IF NOT EXISTS idx_instructions_usage ON instructions(usage_count)')
-            conn.execute('CREATE INDEX IF NOT EXISTS idx_ratings_instruction_id ON instruction_ratings(instruction_id)')
-            conn.execute('CREATE INDEX IF NOT EXISTS idx_chat_history_session_id ON chat_history(session_id)')
+        # индексы (peewee не знает о них, поэтому создаём сырыми запросами один раз)
+        db.execute_sql(
+            "CREATE INDEX IF NOT EXISTS idx_instructions_task_id ON instructions(task_id)"
+        )
+        db.execute_sql(
+            "CREATE INDEX IF NOT EXISTS idx_instructions_usage ON instructions(usage_count)"
+        )
+        db.execute_sql(
+            "CREATE INDEX IF NOT EXISTS idx_ratings_instruction_id ON instruction_ratings(instruction_id)"
+        )
+        db.execute_sql(
+            "CREATE INDEX IF NOT EXISTS idx_chat_history_session_id ON chat_history(session_id)"
+        )
 
         logger.info("Database initialized successfully")
+
+    # ---------- те же публичные методы ----------
 
     def save_tasks_tree(self, tasks_tree_js: Dict[str, Any]) -> None:
         """
         Сохранение дерева задач в БД
-        
+
         Args:
             tasks_tree_js: Дерево задач (Dict[str, Any])
         """
-        with self.get_connection() as conn:
-            conn.execute('''
-                INSERT INTO tasks_trees (application, analyzed_at, tasks_json)
-                VALUES (?, ?, ?)
-            ''', (
-                tasks_tree_js.get('application', 'EcoStore'),
-                tasks_tree_js.get('analyzed_at', datetime.now().isoformat()),
-                json.dumps(tasks_tree_js.get('root_task', []), ensure_ascii=False)
-            ))
-        logger.info(f"Tasks tree saved for application: {tasks_tree_js.get('application', "EcoStore")}")
+        application = tasks_tree_js.get("application", "EcoStore")
+        analyzed_at = tasks_tree_js.get("analyzed_at", datetime.now().isoformat())
+        tasks_json = json.dumps(tasks_tree_js.get("root_task", []), ensure_ascii=False)
+
+        TasksTrees.create(
+            application=application,
+            analyzed_at=analyzed_at,
+            tasks_json=tasks_json,
+            created_at=datetime.now().isoformat(),
+        )
+
+        logger.info(
+            f"Tasks tree saved for application: {tasks_tree_js.get('application', 'EcoStore')}"
+        )
 
     def save_instructions(self, instructions_js: Dict[str, Any]) -> None:
         """
         Сохранение списка намерений в БД
-        
+
         Args:
             instructions_js: Намерения (Dict[str, Any])
         """
-        with self.get_connection() as conn:
-            conn.execute('''
-                INSERT INTO instructions_intents (application, analyzed_at, instructions)
-                VALUES (?, ?, ?)
-            ''', (
-                instructions_js.get('application', 'EcoStore'),
-                instructions_js.get('analyzed_at', datetime.now().isoformat()),
-                json.dumps(instructions_js.get('instructions', []), ensure_ascii=False)
-            ))
-        logger.info(f"instructions saved for application: {instructions_js.get('application', "EcoStore")}")
+        application = instructions_js.get("application", "EcoStore")
+        analyzed_at = instructions_js.get("analyzed_at", datetime.now().isoformat())
+        instructions = json.dumps(
+            instructions_js.get("instructions", []), ensure_ascii=False
+        )
+
+        InstructionsIntents.create(
+            application=application,
+            analyzed_at=analyzed_at,
+            instructions=instructions,
+            created_at=datetime.now().isoformat(),
+        )
+
+        logger.info(
+            f"instructions saved for application: {instructions_js.get('application', 'EcoStore')}"
+        )
 
     def save_instruction(self, instruction_data: Dict[str, Any]) -> None:
         """
         Сохранение инструкции в БД
-        
+
         Args:
             instruction_data: Данные инструкции (Dict[str, Any])
         """
-        with self.get_connection() as conn:
-            conn.execute('''
-                INSERT OR REPLACE INTO instructions
-                (id, task_id, task_data_json, steps_json, user_query, context_json,
-                 timestamp, usage_count, last_used, file_paths_json, likes, dislikes)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (
-                instruction_data['id'],
-                instruction_data['task_id'],
-                json.dumps(instruction_data.get('task_data', {}), ensure_ascii=False),
-                json.dumps(instruction_data.get('steps', []), ensure_ascii=False),
-                instruction_data.get('user_query', ''),
-                json.dumps(instruction_data.get('context', {}), ensure_ascii=False),
-                instruction_data['timestamp'],
-                instruction_data.get('usage_count', 0),
-                instruction_data.get('last_used'),
-                json.dumps(instruction_data.get('file_paths', {}), ensure_ascii=False),
-                instruction_data.get('likes', 0),
-                instruction_data.get('dislikes', 0)
-            ))
+        now_iso = datetime.now().isoformat()
+
+        Instructions.insert(
+            id=instruction_data["id"],
+            task_id=instruction_data["task_id"],
+            task_data_json=json.dumps(
+                instruction_data.get("task_data", {}), ensure_ascii=False
+            ),
+            steps_json=json.dumps(
+                instruction_data.get("steps", []), ensure_ascii=False
+            ),
+            user_query=instruction_data.get("user_query", ""),
+            context_json=json.dumps(
+                instruction_data.get("context", {}), ensure_ascii=False
+            ),
+            timestamp=instruction_data["timestamp"],
+            usage_count=instruction_data.get("usage_count", 0),
+            last_used=instruction_data.get("last_used"),
+            file_paths_json=json.dumps(
+                instruction_data.get("file_paths", {}), ensure_ascii=False
+            ),
+            likes=instruction_data.get("likes", 0),
+            dislikes=instruction_data.get("dislikes", 0),
+            created_at=now_iso,
+            updated_at=now_iso,
+        ).on_conflict(
+            conflict_target=[Instructions.id],
+            preserve=[
+                Instructions.created_at,
+            ],
+            update={
+                Instructions.task_id: instruction_data["task_id"],
+                Instructions.task_data_json: json.dumps(
+                    instruction_data.get("task_data", {}), ensure_ascii=False
+                ),
+                Instructions.steps_json: json.dumps(
+                    instruction_data.get("steps", []), ensure_ascii=False
+                ),
+                Instructions.user_query: instruction_data.get("user_query", ""),
+                Instructions.context_json: json.dumps(
+                    instruction_data.get("context", {}), ensure_ascii=False
+                ),
+                Instructions.timestamp: instruction_data["timestamp"],
+                Instructions.usage_count: instruction_data.get("usage_count", 0),
+                Instructions.last_used: instruction_data.get("last_used"),
+                Instructions.file_paths_json: json.dumps(
+                    instruction_data.get("file_paths", {}), ensure_ascii=False
+                ),
+                Instructions.likes: instruction_data.get("likes", 0),
+                Instructions.dislikes: instruction_data.get("dislikes", 0),
+                Instructions.updated_at: now_iso,
+            },
+        ).execute()
+
         logger.info(f"Instruction saved: {instruction_data['id']}")
+
+
 
 class DOMAnalyzer:
     """Класс для анализа DOM структуры сайта"""
@@ -313,6 +416,7 @@ class DeepSeekClient:
     def generate_instructions(
         self,
         tasks_tree: Dict[str, Any],
+        api_key: str,
     ) -> Dict[str, Any]:
         """
         Генерация намерений на основе анализа DOM
@@ -330,6 +434,7 @@ class DeepSeekClient:
             # ActionTreeGenerator.generate_dict() принимает dict или str и возвращает dict
             tasks_tree: Dict[str, Any] = process_instructions_pipeline(
                 tree_dict=tasks_tree,
+                api_key=api_key
             )
 
             return tasks_tree
@@ -460,7 +565,7 @@ class SiteAnalyzer:
         self.deepseek_client: DeepSeekClient = DeepSeekClient(api_key, api_url)
         self.instruction_manager: InstructionManager = InstructionManager(self.db_manager)
 
-    def analyze_site(self, urls: Optional[List[str]] = None) -> Dict[str, Any]:
+    def analyze_site(self, urls: Optional[List[str]] = None, api_key: str =None) -> Dict[str, Any]:
         """
         Полный анализ сайта
         
@@ -499,7 +604,7 @@ class SiteAnalyzer:
             logger.info("Step 3: Generating instructions...")
             try:
                 # generate_dict возвращает Dict[str, Any]
-                instructions: Dict[str, Any] = self.deepseek_client.generate_instructions(tasks_tree)
+                instructions: Dict[str, Any] = self.deepseek_client.generate_instructions(tasks_tree, api_key)
             except RuntimeError as e:
                 logger.warning(f"Could not generate tasks tree from API: {str(e)}. Using fallback.")
                 tasks_tree: Dict[str, Any] = self._get_fallback_tasks_tree()
@@ -563,6 +668,8 @@ class SiteAnalyzer:
 
 
 def main() -> Dict[str, Any]:
+    load_dotenv()  # подгрузит .env
+    api_key = os.getenv("OPENROUTER_API_KEY")
     """
     Главная функция для запуска анализатора
     
@@ -572,7 +679,7 @@ def main() -> Dict[str, Any]:
     parser = argparse.ArgumentParser(description="Site Analyzer - Analyze website and generate task tree")
     parser.add_argument('--db', type=str, default=DATABASE_PATH, help='Path to database file')
     parser.add_argument('--urls', type=str, nargs='+', default=None, help='URLs to analyze')
-    parser.add_argument('--api-key', type=str, default="YOUR-API", help='OpenRouter API key')
+    parser.add_argument('--api-key', type=str, default=api_key, help='OpenRouter API key')
     parser.add_argument('--api-url', type=str, default=DEEPSEEK_API_URL, help='DeepSeek API URL')
 
     args = parser.parse_args()
@@ -584,7 +691,7 @@ def main() -> Dict[str, Any]:
     logger.info("="*60)
 
     analyzer: SiteAnalyzer = SiteAnalyzer(args.db, args.api_key, args.api_url)
-    result: Dict[str, Any] = analyzer.analyze_site(args.urls)
+    result: Dict[str, Any] = analyzer.analyze_site(args.urls, args.api_key)
 
     logger.info("="*60)
     logger.info(f"Result: {result.get('status', 'unknown')}")

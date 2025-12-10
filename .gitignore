@@ -9,7 +9,7 @@ src/package-lock.json
 src/package.json
 # C extensions
 *.so
-
+srs/.env
 # Distribution / packaging
 .Python
 build/

@@ -44,7 +44,7 @@ class LLMClient:
     def __init__(
         self,
         api_key: str,
-        model: str = "x-ai/grok-4.1-fast:free",
+        model: str = "tngtech/deepseek-r1t2-chimera:free",
         base_url: str = "https://openrouter.ai/api/v1/chat/completions",
         timeout: int = 120
     ):
@@ -52,7 +52,7 @@ class LLMClient:
         self.base_url: str = base_url
         self.model: str = model
         self.timeout: int = timeout
-    
+            
     def call_api(self, messages: List[Dict[str, str]], temperature: float = 0.7) -> str:
         """Низкоуровневый вызов API"""
         
